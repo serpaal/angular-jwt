@@ -1,1 +1,49 @@
-<p>requerimientos works!</p>
+<div style="padding: 20px;">
+  <p-table #dt [value]="requerimientos" [autoLayout]="true" [rowHover]="true" 
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
+    [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+    [filterDelay]="0" [globalFilterFields]="['nro_req','Detalle','solicitante']">
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+            Lista de Requerimientos                 
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar"/>
+                </span>                        
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Nro</th>
+            <th>Solicitante</th>
+            <th [style]="{'width':'200px'}">Fecha Solicitud</th>
+            <th>Descripcion</th>
+            <th>Detalle Requerimiento</th>
+            <th>Estado</th>  
+            <th>Open Project</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-requerimiento>
+        <tr class="p-selectable-row">
+            <td>
+              <p-tableCheckbox [value]="requerimiento"></p-tableCheckbox>
+            </td>
+            <td>{{requerimiento.nro_req}}</td>
+            <td>{{requerimiento.solicitante}}</td>
+            <td>{{requerimiento.fecha_sol}}</td>
+            <td>{{requerimiento.descrip_req}}</td>
+            <td>{{requerimiento.Detalle | titlecase}}</td>
+            <td>{{requerimiento.estado_req}}</td>
+            <td><p-button label="Enviar" icon="pi pi-send" iconPos="left" (click)="sendOpenProject(requerimiento)"></p-button></td>       
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="8">No existen requerimientos pendientes.</td>
+        </tr>
+    </ng-template>
+  </p-table>  
+</div>
