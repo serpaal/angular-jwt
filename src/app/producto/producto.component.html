@@ -1,20 +1,28 @@
-<!--<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-    <thead>
+<p-table [value]="products">
+  <ng-template pTemplate="header">
       <tr>
-        <th>ID</th>
-        <th>Codigo</th>
-        <th>Nombre</th>
-        <th>Descripcion</th>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Brand</th>
+          <th>Quantity</th>
+          <th>Unit</th>          
       </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let p of products">
-        <td>{{ p.id }}</td>
-        <td>{{ p.code }}</td>
-        <td>{{ p.name }}</td>
-        <td>{{ p.description }}</td>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+      <tr class="p-selectable-row">
+          <td>
+            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+          </td>
+          <td>{{product.code}}</td>
+          <td>{{product.name}}</td>
+          <td>{{product.description}}</td>
+          <td>{{product.brand}}</td>
+          <td>{{product.stock}}</td>
+          <td>{{product.unit}}</td>
       </tr>
-    </tbody>
-</table>
--->
-<h1>Hello Productos</h1>
+  </ng-template>
+</p-table>

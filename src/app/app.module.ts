@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginModule } from './login/login.module';
-import { DataTablesModule } from 'angular-datatables';
+
 
 @NgModule({
   declarations: [
@@ -18,8 +18,7 @@ import { DataTablesModule } from 'angular-datatables';
     AppRoutingModule, 
     HttpClientModule,
     ReactiveFormsModule,
-    LoginModule,
-    DataTablesModule
+    LoginModule
   ],
   providers: [],
   bootstrap: [AppComponent]
