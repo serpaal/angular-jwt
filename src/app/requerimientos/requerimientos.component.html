@@ -1,6 +1,6 @@
-<div style="padding: 20px;">
-  <p-table #dt [value]="requerimientos" [autoLayout]="true" [rowHover]="true" 
-    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
+<div class="card">
+  <p-table #dt [value]="requerimientos" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-striped" 
+  [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
     [filterDelay]="0" [globalFilterFields]="['nro_req','Detalle','solicitante']">
     <ng-template pTemplate="caption">
@@ -17,13 +17,14 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th>Nro</th>
-            <th>Solicitante</th>
-            <th [style]="{'width':'200px'}">Fecha Solicitud</th>
+            <th pSortableColumn="nro_req" [style]="{'width':'90px'}">Nro<p-sortIcon field="nro_req"></p-sortIcon></th>
+            <th pSortableColumn="solicitante" [style]="{'width':'170px'}">Solicitante<p-sortIcon field="solicitante"></p-sortIcon></th>
+            <th pSortableColumn="fecha_sol" [style]="{'width':'200px'}">Fecha Solicitud<p-sortIcon field="fecha_sol"></p-sortIcon></th>
             <th>Descripcion</th>
             <th>Detalle Requerimiento</th>
             <th>Estado</th>  
             <th>Open Project</th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-requerimiento>
@@ -37,8 +38,12 @@
             <td>{{requerimiento.descrip_req}}</td>
             <td>{{requerimiento.Detalle | titlecase}}</td>
             <td>{{requerimiento.estado_req}}</td>
-            <td><p-button label="Enviar" icon="pi pi-send" iconPos="left" (click)="sendOpenProject(requerimiento)"></p-button></td>       
+            <td><p-dropdown [options]="projects" [(ngModel)]="selectedProject" optionLabel="name" [showClear]="true" placeholder="Seleccione un proyecto..." [required]="true"></p-dropdown></td>
+            <td><button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded" (click)="sendOpenProject(requerimiento)"></button></td>            
         </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="getRequerimientos()"></p-button>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>

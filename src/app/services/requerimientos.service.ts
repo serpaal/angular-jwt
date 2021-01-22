@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtStorageService } from './jwt-storage.service';
+import { Requerimientos } from '../requerimientos/requerimientos';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,13 @@ export class RequerimientosService {
   url = 'assets/requerimientos.json';
   constructor(private jwtService: JwtStorageService, private http: HttpClient) { }
 
-  getRequerimientos(): any {       
+  getRequerimientos()  {       
     /*const headers = { 'Authorization': 'Bearer ' + this.jwtService.getToken() };
     return this.http.get<any>(`${this.url}`, { headers });*/
-    return this.http.get<any>(`${this.url}`);
+    return this.http.get<any>(`${this.url}`) 
+    .toPromise()
+    .then(res => <Requerimientos[]>res)
+    .then(data => { return data; });
   }
 
   /*

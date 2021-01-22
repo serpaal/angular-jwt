@@ -7,6 +7,7 @@ import {PanelModule} from 'primeng/panel';
 import {TableModule} from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {InputTextModule} from 'primeng/inputtext';
     PanelModule,
     TableModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    DropdownModule
   ]
 })
 export class RequerimientosModule { }
