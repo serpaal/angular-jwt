@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Requerimientos } from './requerimientos';
 import { RequerimientosService } from '../services/requerimientos.service';
 import { OpenProjectService } from '../services/open-project.service';
+import { Project } from '../open-project/project';
 
 @Component({
   selector: 'app-requerimientos',
@@ -11,8 +12,8 @@ import { OpenProjectService } from '../services/open-project.service';
 export class RequerimientosComponent implements OnInit {
   loading: boolean = true;
   requerimientos: Requerimientos[] = [];
-  projects: any;
-  selectedProject: any;
+  projects: Project[] = [];
+  selectedProject: Project;
   
   constructor(private requerimientosService: RequerimientosService, private openProjectService: OpenProjectService) { }
 
@@ -38,11 +39,12 @@ export class RequerimientosComponent implements OnInit {
 
   ngOnDestroy(): void {
   }
+  
 
   sendOpenProject(record): void {
     console.log('requerimiento');
     console.dir(record);
-    console.dir(this.selectedProject);
+    //console.dir(this.selectedProject);
   }
 
 }

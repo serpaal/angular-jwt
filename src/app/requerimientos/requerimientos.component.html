@@ -38,8 +38,16 @@
             <td>{{requerimiento.descrip_req}}</td>
             <td>{{requerimiento.Detalle | titlecase}}</td>
             <td>{{requerimiento.estado_req}}</td>
-            <td><p-dropdown [options]="projects" [(ngModel)]="selectedProject" optionLabel="name" [showClear]="true" placeholder="Seleccione un proyecto..." [required]="true"></p-dropdown></td>
-            <td><button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded" (click)="sendOpenProject(requerimiento)"></button></td>            
+            <td>
+                <p-dropdown [options]="projects"  [(ngModel)]="requerimiento.project" optionLabel="name" 
+                    [showClear]="true" placeholder="Seleccione un proyecto...">
+                </p-dropdown>
+            </td>
+            <td>
+                <button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded" pTooltip="Enviar a Open Project"
+                    (click)="sendOpenProject(requerimiento)" [disabled]="!requerimiento.project">
+                </button>                
+            </td>            
         </tr>
     </ng-template>
     <ng-template pTemplate="paginatorleft">
@@ -50,5 +58,6 @@
             <td colspan="8">No existen requerimientos pendientes.</td>
         </tr>
     </ng-template>
-  </p-table>  
+  </p-table> 
+ <!-- <p-dropdown [options]="projects" [(ngModel)]="selectedProject" optionLabel="name" [showClear]="true" placeholder="Seleccione un proyecto..." (onChange) = "change()"></p-dropdown> -->
 </div>

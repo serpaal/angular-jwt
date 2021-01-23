@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtStorageService } from './jwt-storage.service';
+import { Project } from '../open-project/project';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class OpenProjectService {
      
      return this.http.get<any>(`${this.url}`, { headers })
      .toPromise()
-     .then(res => res._embedded)
-     .then(data => { return data.elements; });
+     .then(res => <Project[]>res._embedded.elements)
+     .then(data => { return data; });
    } 
    
 }

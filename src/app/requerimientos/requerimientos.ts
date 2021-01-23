@@ -13,5 +13,6 @@ export interface Requerimientos {
    est_detalle: String,
    estado_req: String,
    estadp_detalle: String,
-   Detalle: String
+   Detalle: String,
+   project: String
 }
