@@ -30,12 +30,12 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanLoad 
 
   checkLogin(url: string): boolean {
    const token: string = this.jwtStorage.getToken();
-   console.dir(token);
    if (token) {
        if (!this.jwtHelper.isTokenExpired(token)) {
         return true;
        }
    }
+   this.jwtStorage.signOut();
     // Store the attempted URL for redirecting
     this.authService.redirectUrl = url;
 

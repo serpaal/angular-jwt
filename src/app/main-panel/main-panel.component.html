@@ -1,11 +1,8 @@
-<div id="app">
+<!--<div id="app">
     <nav class="navbar navbar-expand navbar-dark bg-dark">
       <a href="#" class="navbar-brand">Mesa de Ayuda</a>
       <ul class="navbar-nav mr-auto" routerLinkActive="active">
-        <!--<li class="nav-item">
-          <a href="/home" class="nav-link" routerLink="home">Home </a>
-        </li>-->
-        <li class="nav-item" *ngIf="!showAdminBoard">
+          <li class="nav-item" *ngIf="!showAdminBoard">
           <a href="/requerimientos" class="nav-link" *ngIf="isLoggedIn" routerLink="requerimientos">Requerimientos</a>
         </li>
         <li class="nav-item">
@@ -36,3 +33,12 @@
     <router-outlet></router-outlet>
     
   </div>
+-->
+<p-menubar [model]="items">
+  <div>
+    <button pButton pRipple type="button" label="{{username}}" class="p-button-secondary p-button-text"></button>
+    <button class="p-button-danger" type="button" pButton label="Salir" icon="pi pi-power-off" style="margin-left:.25em" (click)="logout()"></button>
+  </div>
+</p-menubar>
+
+<router-outlet></router-outlet>

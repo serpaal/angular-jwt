@@ -19,7 +19,8 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService, private jwtStorage: JwtStorageService) { }
 
   ngOnInit(): void {
-    if (this.jwtStorage.getToken()) {
+    const token: string = this.jwtStorage.getToken();
+    if (token) {
       this.isLoggedIn = true;
       this.router.navigate(['/']);
     }

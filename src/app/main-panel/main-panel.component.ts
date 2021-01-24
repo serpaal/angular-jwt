@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { JwtStorageService } from '../services/jwt-storage.service'
+import { JwtStorageService } from '../services/jwt-storage.service';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-main-panel',
@@ -7,7 +8,7 @@ import { JwtStorageService } from '../services/jwt-storage.service'
   styleUrls: ['./main-panel.component.css']
 })
 export class MainPanelComponent implements OnInit {
-
+  private items: MenuItem[];
   private roles: string[];
   isLoggedIn = false;
   showAdminBoard = false;
@@ -26,7 +27,13 @@ export class MainPanelComponent implements OnInit {
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
-      this.username = user.username;
+      this.username = user.firstname.concat(' ', user.lastname);
+
+      this.items = [
+            { label: 'Requerimientos', icon: 'pi pi-cog', routerLink: ['/main/requerimientos']},
+            { label: 'Incidentes', icon: 'pi pi-exclamation-triangle', routerLink: ['/main/productos']}
+      ]    
+     
     }
   }
 
@@ -34,5 +41,4 @@ export class MainPanelComponent implements OnInit {
     this.tokenStorageService.signOut();
     window.location.reload();
   }
-
 }
