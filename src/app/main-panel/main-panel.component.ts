@@ -8,11 +8,9 @@ import {MenuItem} from 'primeng/api';
   styleUrls: ['./main-panel.component.css']
 })
 export class MainPanelComponent implements OnInit {
-  private items: MenuItem[];
+  items: MenuItem[];
   private roles: string[];
-  isLoggedIn = false;
-  showAdminBoard = false;
-  showModeratorBoard = false;
+  isLoggedIn = false;  
   username: string;
 
   constructor(private tokenStorageService: JwtStorageService) { }
@@ -23,12 +21,7 @@ export class MainPanelComponent implements OnInit {
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
-
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
       this.username = user.firstname.concat(' ', user.lastname);
-
       this.items = [
             { label: 'Requerimientos', icon: 'pi pi-cog', routerLink: ['/main/requerimientos']},
             { label: 'Incidentes', icon: 'pi pi-exclamation-triangle', routerLink: ['/main/productos']}
