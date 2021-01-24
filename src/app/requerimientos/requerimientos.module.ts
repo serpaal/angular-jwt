@@ -9,10 +9,11 @@ import {TooltipModule} from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
+import { CustomDatePipe } from '../pipes/custom-date.pipe';
 
 
 @NgModule({
-  declarations: [RequerimientosComponent],
+  declarations: [RequerimientosComponent, CustomDatePipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -23,6 +24,7 @@ import {DropdownModule} from 'primeng/dropdown';
     ButtonModule,
     InputTextModule,
     DropdownModule
-  ]
+  ],
+  exports: [CustomDatePipe]
 })
 export class RequerimientosModule { }

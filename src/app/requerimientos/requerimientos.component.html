@@ -1,6 +1,6 @@
 <div class="card">
-  <p-table #dt [value]="requerimientos" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-striped" 
-  [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
+  <p-table #dt [value]="requerimientos" selectionMode="single" [(selection)]="selectedRequerimiento" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-striped" 
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
     [filterDelay]="0" [globalFilterFields]="['nro_req','Detalle','solicitante']">
     <ng-template pTemplate="caption">
@@ -14,9 +14,6 @@
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
-            <th style="width: 3rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
             <th pSortableColumn="nro_req" [style]="{'width':'90px'}">Nro<p-sortIcon field="nro_req"></p-sortIcon></th>
             <th pSortableColumn="solicitante" [style]="{'width':'170px'}">Solicitante<p-sortIcon field="solicitante"></p-sortIcon></th>
             <th pSortableColumn="fecha_sol" [style]="{'width':'200px'}">Fecha Solicitud<p-sortIcon field="fecha_sol"></p-sortIcon></th>
@@ -29,9 +26,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-requerimiento>
         <tr class="p-selectable-row">
-            <td>
-              <p-tableCheckbox [value]="requerimiento"></p-tableCheckbox>
-            </td>
+            <tr [pSelectableRow]="requerimiento">
             <td>{{requerimiento.nro_req}}</td>
             <td>{{requerimiento.solicitante}}</td>
             <td>{{requerimiento.fecha_sol}}</td>

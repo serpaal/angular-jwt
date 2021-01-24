@@ -1,3 +1,5 @@
+import { StringMap } from "@angular/compiler/src/compiler_facade_interface";
+
 export interface Requerimientos {
    nro_req: String,
    fecha_sol: Date,

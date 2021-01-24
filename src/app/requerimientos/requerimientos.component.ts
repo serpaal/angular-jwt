@@ -12,6 +12,7 @@ import { Project } from '../open-project/project';
 export class RequerimientosComponent implements OnInit {
   loading: boolean = true;
   requerimientos: Requerimientos[] = [];
+  selectedRequerimiento: Requerimientos;
   projects: Project[] = [];
   selectedProject: Project;
   
@@ -44,7 +45,5 @@ export class RequerimientosComponent implements OnInit {
   sendOpenProject(record): void {
     console.log('requerimiento');
     console.dir(record);
-    //console.dir(this.selectedProject);
-  }
-
+  }  
 }
