@@ -7,20 +7,34 @@ import { Project } from '../open-project/project';
   providedIn: 'root'
 })
 export class OpenProjectService {
-
-   //url = 'http://elflap03.elfec.com:88/OpenProject/api/v3/projects';
-   url = 'assets/projects.json';
+   
+  
    constructor(private jwtService: JwtStorageService, private http: HttpClient) { }
  
    getProjects()  {      
-    let headers = new HttpHeaders();
-    headers.append("Authorization", "Basic " + btoa("apikey:ba0ed49e95b880bac58fb24ab0a1c2c4fd948e996dd91a920f6031523c772838"));
-    headers.append("Content-Type", "application/x-www-form-urlencoded");
-     
-     return this.http.get<any>(`${this.url}`, { headers })
+    //const url = 'http://elflap03.elfec.com:88/OpenProject/api/v3/projects';
+    const url = 'http://192.168.100.102:8088/api/v3/projects';
+    const auth = window.btoa('apikey' + ':' + '5f0ba1da6a19c55b70c4009781be469749973cef24a3aea960cf7f46977138de');    
+    const headers = { 'Authorization': `Basic ${auth}` };
+    
+
+     return this.http.get<any>(`${url}`, { headers })
      .toPromise()
      .then(res => <Project[]>res._embedded.elements)
      .then(data => { return data; });
    } 
+
+   setWorkPackage(payload: any){
+    const url = 'http://192.168.100.102:8088/api/v3/work_packages';
+    const auth = window.btoa('apikey' + ':' + '5f0ba1da6a19c55b70c4009781be469749973cef24a3aea960cf7f46977138de');    
+    
+    const headers = { 'Authorization': `Basic ${auth}` };
+     return this.http.post<any>(`${url}`, payload, { headers })
+     .toPromise()
+     .then(response => { 
+       console.dir('response');
+       return response; 
+      });
+   }
    
 }
