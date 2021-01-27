@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {formatDate} from '@angular/common';
+import { formatDate } from '@angular/common';
+import { MessageService } from 'primeng/api';
 import { Requerimientos } from './requerimientos';
 import { RequerimientosService } from '../services/requerimientos.service';
 import { OpenProjectService } from '../services/open-project.service';
@@ -8,7 +9,8 @@ import { Project } from '../open-project/project';
 @Component({
   selector: 'app-requerimientos',
   templateUrl: './requerimientos.component.html',
-  styleUrls: ['./requerimientos.component.css']
+  styleUrls: ['./requerimientos.component.css'],
+  providers: [MessageService]
 })
 export class RequerimientosComponent implements OnInit {
   loading: boolean = true;
@@ -17,7 +19,7 @@ export class RequerimientosComponent implements OnInit {
   projects: Project[] = [];
   selectedProject: Project;
   
-  constructor(private requerimientosService: RequerimientosService, private openProjectService: OpenProjectService) { }
+  constructor(private requerimientosService: RequerimientosService, private openProjectService: OpenProjectService, private messageService: MessageService) { }
 
   ngOnInit(): void {  
     this.getRequerimientos();  
@@ -29,6 +31,7 @@ export class RequerimientosComponent implements OnInit {
       .then(data => {
         this.loading = false;
         this.requerimientos = data;
+        this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
     });
   }
 

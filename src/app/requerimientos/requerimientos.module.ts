@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
 import { CustomDatePipe } from '../pipes/custom-date.pipe';
+import {ToastModule} from 'primeng/toast';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { CustomDatePipe } from '../pipes/custom-date.pipe';
     TooltipModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule
+    DropdownModule,
+    ToastModule
   ],
   exports: [CustomDatePipe]
 })
