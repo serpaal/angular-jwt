@@ -3,7 +3,7 @@
   <p-table #dt [value]="requerimientos" selectionMode="single" [(selection)]="selectedRequerimiento" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" 
     [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-    [filterDelay]="0" [globalFilterFields]="['nro_req','Detalle','solicitante']">
+    [filterDelay]="0" [globalFilterFields]="['nro_req','justific','nomb_comp']">
     <ng-template pTemplate="caption">
         <div class="table-header">
             Requerimientos                 
@@ -16,11 +16,13 @@
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="nro_req" [style]="{'width':'90px'}">Nro<p-sortIcon field="nro_req"></p-sortIcon></th>
-            <th pSortableColumn="solicitante" [style]="{'width':'170px'}">Solicitante<p-sortIcon field="solicitante"></p-sortIcon></th>
+            <th pSortableColumn="nomb_comp" [style]="{'width':'170px'}">Solicitante<p-sortIcon field="nomb_comp"></p-sortIcon></th>
             <th pSortableColumn="fecha_sol" [style]="{'width':'200px'}">Fecha Solicitud<p-sortIcon field="fecha_sol"></p-sortIcon></th>
             <th>Descripcion</th>
             <th>Detalle Requerimiento</th>
             <th>Estado</th>  
+            <th [style]="{'width':'200px'}">Proyect OP</th>              
+            <th [style]="{'width':'80px'}">ID OP</th>
             <th>Open Project</th>
             <th></th>
         </tr>
@@ -29,11 +31,13 @@
         <tr class="p-selectable-row">
             <tr [pSelectableRow]="requerimiento">
             <td>{{requerimiento.nro_req}}</td>
-            <td>{{requerimiento.solicitante}}</td>
-            <td>{{requerimiento.fecha_sol}}</td>
+            <td>{{requerimiento.nomb_comp}}</td>
+            <td style="text-align: center;">{{requerimiento.fecha_sol | date: 'dd/MM/yyyy'}}</td>
             <td>{{requerimiento.descrip_req}}</td>
-            <td>{{requerimiento.Detalle | titlecase}}</td>
-            <td>{{requerimiento.estado_req}}</td>
+            <td>{{requerimiento.justific }}</td>
+            <td style="text-align: center;">{{requerimiento.estado}}</td>
+            <td style="text-align: center;">{{requerimiento.open_project_title}}</td>
+            <td style="text-align: center;">{{requerimiento.open_project_id}}</td>
             <td>
                 <p-dropdown [options]="projects"  [(ngModel)]="requerimiento.project" optionLabel="name" 
                     [showClear]="true" placeholder="Seleccione un proyecto...">
@@ -41,7 +45,7 @@
             </td>
             <td>
                 <button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded" pTooltip="Enviar a Open Project"
-                    (click)="sendOpenProject(requerimiento)" [disabled]="!requerimiento.project">
+                    (click)="sendOpenProject(requerimiento)" [disabled]="!requerimiento.project || requerimiento.open_project_id">
                 </button>                
             </td>            
         </tr>

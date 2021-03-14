@@ -1,0 +1,56 @@
+<p-toast position="top-right"></p-toast>
+<div class="card">
+  <p-table #dt [value]="incidentes" selectionMode="single" [(selection)]="selectedIncidente" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" 
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
+    [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+    [filterDelay]="0" [globalFilterFields]="['nro_inc','descrip','nomb_comp']">
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+            Incidentes                 
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar"/>
+                </span>                        
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="nro_inc" [style]="{'width':'90px'}">Nro<p-sortIcon field="nro_inc"></p-sortIcon></th>
+            <th pSortableColumn="nomb_comp" [style]="{'width':'170px'}">Solicitante<p-sortIcon field="nomb_comp"></p-sortIcon></th>
+            <th pSortableColumn="fecha_sol" [style]="{'width':'200px'}">Fecha Solicitud<p-sortIcon field="fecha_sol"></p-sortIcon></th>
+            <th>Detalle Incidente</th>
+            <th>Estado</th>  
+            <th>Open Project</th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-incidente>
+        <tr class="p-selectable-row">
+            <tr [pSelectableRow]="incidente">
+            <td>{{incidente.nro_inc}}</td>
+            <td>{{incidente.nomb_comp}}</td>
+            <td style="text-align: center;">{{incidente.fecha_sol | date: 'dd/MM/yyyy'}}</td>
+            <td>{{incidente.descrip }}</td>
+            <td style="text-align: center;">{{incidente.estado}}</td>
+            <td>
+                <p-dropdown [options]="projects"  [(ngModel)]="incidente.project" optionLabel="name" 
+                    [showClear]="true" placeholder="Seleccione un proyecto...">
+                </p-dropdown>
+            </td>
+            <td>
+                <button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded" pTooltip="Enviar a Open Project"
+                    (click)="sendOpenProject(incidente)" [disabled]="!incidente.project">
+                </button>                
+            </td>            
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="getIncidentes()"></p-button>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="8">No existen incidentes pendientes.</td>
+        </tr>
+    </ng-template>
+  </p-table> 
+</div>

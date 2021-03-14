@@ -3,7 +3,18 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiKey: "9efc25bc5b43f6c17579c5e4615124886c18cbf2ff18bb5dc409e163a3984986",
+  hostAuth: "http://159.203.189.218:9001",
+  hostToolsOpenProject: "http://localhost:9001/api/v1",
+  hostMesaAyuda: "http://localhost:5002/api",
+  hotOpenProject: "http://localhost:8080",
+  endpoints: {
+    login: "/auth/login",
+    requerimientosMesaAyuda: "/requeriminf",
+    requerimientos: "/requerimientos",   
+    setRequerimientos: "/requerimientos/set_requerimientos_json" 
+  }
 };
 
 /*

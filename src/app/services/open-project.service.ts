@@ -13,8 +13,8 @@ export class OpenProjectService {
  
    getProjects()  {      
     //const url = 'http://elflap03.elfec.com:88/OpenProject/api/v3/projects';
-    const url = 'http://192.168.100.102:8088/api/v3/projects';
-    const auth = window.btoa('apikey' + ':' + '5f0ba1da6a19c55b70c4009781be469749973cef24a3aea960cf7f46977138de');    
+    const url = 'http://127.0.0.1:8080/api/v3/projects';
+    const auth = window.btoa('apikey' + ':' + '9efc25bc5b43f6c17579c5e4615124886c18cbf2ff18bb5dc409e163a3984986');    
     const headers = { 'Authorization': `Basic ${auth}` };
     
 
@@ -25,8 +25,8 @@ export class OpenProjectService {
    } 
 
    setWorkPackage(payload: any){
-    const url = 'http://192.168.100.102:8088/api/v3/work_packages';
-    const auth = window.btoa('apikey' + ':' + '5f0ba1da6a19c55b70c4009781be469749973cef24a3aea960cf7f46977138de');    
+    const url = 'http://127.0.0.1:8080/api/v3/work_packages';
+    const auth = window.btoa('apikey' + ':' + '9efc25bc5b43f6c17579c5e4615124886c18cbf2ff18bb5dc409e163a3984986');    
     
     const headers = { 'Authorization': `Basic ${auth}` };
      return this.http.post<any>(`${url}`, payload, { headers })

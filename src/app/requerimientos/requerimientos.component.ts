@@ -22,38 +22,41 @@ export class RequerimientosComponent implements OnInit {
   constructor(private requerimientosService: RequerimientosService, private openProjectService: OpenProjectService, private messageService: MessageService) { }
 
   ngOnInit(): void {  
-    this.getRequerimientos();  
+    this.findRequerimientos();  
     this.getProjects();
   }
 
-  getRequerimientos(): void {
-    this.requerimientosService.getRequerimientos()
-      .then(data => {
+  findRequerimientos(): void {
+    this.requerimientosService.findRequerimientos().subscribe(res => {
+      this.requerimientosService.setRequerimientosJson({requerimientos_json: JSON.stringify(res)}).subscribe(res => {
+        this.requerimientosService.getRequerimientos().subscribe(res =>{
+          this.loading = false;
+          this.requerimientos = res;
+        })
+       
+      })     
+    })
+   
+    /*  .then(data => {
         this.loading = false;
         this.requerimientos = data;
         this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
-    });
-  }
+    });*/
+  } 
 
   getProjects(): void {
     this.openProjectService.getProjects()
     .then(data => {
       this.projects = data;
     });
-  }
+  }  
 
-  ngOnDestroy(): void {
-  }
-  
-
-  sendOpenProject(record): void {   
-
-
+  sendOpenProject(record): void {
     let payload = {
       subject: record.nro_req,
       description: {
           format: "markdown",
-          raw: record.Detalle,
+          raw: record.justific,
           html: ""
       },
       scheduleManually: false,
@@ -101,7 +104,15 @@ export class RequerimientosComponent implements OnInit {
     this.openProjectService.setWorkPackage(payload)
     .then(data => {
         this.loading = false;
-        console.dir(data);
+        record.open_project_id = data.id.toString();
+        record.open_project_title = data._links.project.title;
+        record.open_project_status = data._links.status.title;
+        this.requerimientosService.updateRequerimiento(record.id, record).subscribe(res => {
+          this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
+        });  
     });
-  }  
+  } 
+  
+  ngOnDestroy(): void {
+  }
 }

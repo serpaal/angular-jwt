@@ -1,20 +1,19 @@
-import { StringMap } from "@angular/compiler/src/compiler_facade_interface";
 
 export interface Requerimientos {
-   nro_req: String,
-   fecha_sol: Date,
-   cod_otr: String,
-   descrip_req: String,
-   fecha_eje?: Date,
-   fecha_ini_ti?: Date,
-   solicitante: String,
-   asignado: String,
-   cod_u_drv: String,
-   cod_u_rbl: String,
-   est_req: String,
-   est_detalle: String,
-   estado_req: String,
-   estadp_detalle: String,
-   Detalle: String,
-   project: String
+   id: number;  
+   nro_req: string;
+   fecha_sol: Date;
+   nomb_comp: string;
+   descrip_req: string;
+   justific: string;
+   cod_u_rbl: string;
+   observ?: string;
+   arch_adj?: string;
+   estado: string;
+   open_project_id?: string;
+   open_project_title?: string;
+   open_project_status?: string;
+   username: string;  
+   created_at?: Date;
+   updated_at?: Date;
 }

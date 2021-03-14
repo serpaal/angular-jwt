@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtStorageService } from './jwt-storage.service';
+import { Incidentes } from '../incidentes/incidentes';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductoService {
-  url = 'http://159.203.189.218:9001/product';
+export class IncidentesService {
+  url = 'http://localhost:5002/api/incidentesinf';
   constructor(private jwtService: JwtStorageService, private http: HttpClient) { }
 
-  getProductos(): any {       
-    const headers = { 'Authorization': 'Bearer ' + this.jwtService.getToken() };
-    return this.http.get<any>(`${this.url}`, { headers });
+  getIncidentes()  {
+    return this.http.get<Incidentes[]>(`${this.url}`)     
   }
 }

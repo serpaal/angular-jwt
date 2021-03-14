@@ -24,7 +24,7 @@ export class MainPanelComponent implements OnInit {
       this.username = user.firstname.concat(' ', user.lastname);
       this.items = [
             { label: 'Requerimientos', icon: 'pi pi-cog', routerLink: ['/main/requerimientos']},
-            { label: 'Incidentes', icon: 'pi pi-exclamation-triangle', routerLink: ['/main/productos']}
+            { label: 'Incidentes', icon: 'pi pi-exclamation-triangle', routerLink: ['/main/incidentes']}
       ]    
      
     }
