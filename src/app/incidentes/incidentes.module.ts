@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
+import {ProgressBarModule} from 'primeng/progressbar';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     InputTextModule,
     DropdownModule,
-    ToastModule
+    ToastModule,
+    ProgressBarModule
   ]
 })
 export class IncidentesModule { }

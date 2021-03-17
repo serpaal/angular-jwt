@@ -11,6 +11,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
 import { CustomDatePipe } from '../pipes/custom-date.pipe';
 import {ToastModule} from 'primeng/toast';
+import {ProgressBarModule} from 'primeng/progressbar';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {ToastModule} from 'primeng/toast';
     ButtonModule,
     InputTextModule,
     DropdownModule,
-    ToastModule
+    ToastModule,
+    ProgressBarModule
   ],
   exports: [CustomDatePipe]
 })

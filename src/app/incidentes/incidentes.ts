@@ -1,16 +1,15 @@
 export interface Incidentes {
     nro_inc: String;
     fecha_sol: Date;
-    cod_usr: String;
-    cod_vinc: String;
-    cod_area: String;
-    cod_u_rbl: String;
-    fecha_cierre: Date;
-    cod_u_rcp: String;
-    observ: String;
-    arch_adj: String;
-    estado: String;
     nomb_comp: String;
-    descrip: String; 
-    project: String;
+    arch_adj: String;
+    observ: String;
+    descrip: String;  
+    cod_u_rbl: String;
+    estado: String;
+    open_project_id?: string;
+    open_project_title?: string;
+    open_project_status?: string;
+    open_project_percentage_done: number,
+    open_project_assignee: string,
 }

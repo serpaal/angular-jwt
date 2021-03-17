@@ -16,6 +16,7 @@ export class MainPanelComponent implements OnInit {
   constructor(private tokenStorageService: JwtStorageService) { }
 
   ngOnInit(): void {
+    
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {

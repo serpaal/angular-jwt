@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { JwtStorageService } from './jwt-storage.service';
 import { Requerimientos } from '../requerimientos/requerimientos';
 import { environment } from 'src/environments/environment';
-import { env } from 'process';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -19,12 +18,17 @@ export class RequerimientosService {
    * Busca requerimientos en mesa de ayuda
    * @returns una coleccion de requerimientos de mesa de ayuda
    */
-  findRequerimientos()  {   
+  findRequerimientos(params)  {   
     const url = environment.hostMesaAyuda.concat(environment.endpoints["requerimientosMesaAyuda"]);
     //const url = 'http://localhost:5002/api/requeriminf';    
     /*const headers = { 'Authorization': 'Bearer ' + this.jwtService.getToken() };
     return this.http.get<any>(`${this.url}`, { headers });*/
-    return this.http.get<any[]>(`${url}`) 
+
+    let _params = new HttpParams();  
+    for (let k of Object.keys(params))
+      _params = _params.append(k, params[k]);
+
+    return this.http.get<any[]>(`${url}`, { params: _params });
   }
 
   setRequerimientosJson(params: any)  {  
@@ -36,11 +40,21 @@ export class RequerimientosService {
     return this.http.post(`${url}`, params);   
   }
 
-  getRequerimientos() {   
+  updateRequerimientosJson(params: any)  {  
+    const url = environment.hostToolsOpenProject.concat(environment.endpoints["updateRequerimientos"]);      
+    return this.http.post(`${url}`, params);   
+  }
+
+  getRequerimientos(params) {   
     const url = environment.hostToolsOpenProject.concat(environment.endpoints["requerimientos"]);  
     /*const headers = { 'Authorization': 'Bearer ' + this.jwtService.getToken() };
     return this.http.get<any>(`${this.url}`, { headers });*/
-    return this.http.get<Requerimientos[]>(`${url}`) 
+    
+    let _params = new HttpParams();  
+    for (let k of Object.keys(params))
+      _params = _params.append(k, params[k]);
+
+    return this.http.get<Requerimientos[]>(`${url}`, {params: _params}); 
   }
 
   updateRequerimiento(id:number, params: any)  {  

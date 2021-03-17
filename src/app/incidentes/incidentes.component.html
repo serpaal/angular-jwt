@@ -6,20 +6,40 @@
     [filterDelay]="0" [globalFilterFields]="['nro_inc','descrip','nomb_comp']">
     <ng-template pTemplate="caption">
         <div class="table-header">
-            Incidentes                 
-                <span class="p-input-icon-left">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar"/>
-                </span>                        
+            <span>
+                <button pButton pRipple type="button" label="Incidentes" class="p-button-secondary p-button-text"></button>                           
+                <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="findIncidentes()"></p-button>
+            </span>    
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Buscar"/>
+            </span>                        
         </div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="nro_inc" [style]="{'width':'90px'}">Nro<p-sortIcon field="nro_inc"></p-sortIcon></th>
             <th pSortableColumn="nomb_comp" [style]="{'width':'170px'}">Solicitante<p-sortIcon field="nomb_comp"></p-sortIcon></th>
-            <th pSortableColumn="fecha_sol" [style]="{'width':'200px'}">Fecha Solicitud<p-sortIcon field="fecha_sol"></p-sortIcon></th>
+            <th pSortableColumn="fecha_sol" [style]="{'width':'80px'}">Fecha<p-sortIcon field="fecha_sol"></p-sortIcon></th>
             <th>Detalle Incidente</th>
             <th>Estado</th>  
+            <th [style]="{'width':'80px'}">ID OP</th>
+            <th [style]="{'width':'150px'}">Status</th>
+            <th [style]="{'width':'150px'}">Progreso</th>
+            <th [style]="{'width':'170px'}">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                    Asignado
+                    <p-columnFilter field="open_project_assignee" matchMode="equals" display="menu">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-dropdown [ngModel]="value" [options]="assignee" (onChange)="filter($event.value)" placeholder="Any">
+                                <ng-template let-option pTemplate="item">
+                                    <span >{{option.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </ng-template>
+                    </p-columnFilter>
+                </div>
+            </th>
             <th>Open Project</th>
             <th></th>
         </tr>
@@ -30,22 +50,30 @@
             <td>{{incidente.nro_inc}}</td>
             <td>{{incidente.nomb_comp}}</td>
             <td style="text-align: center;">{{incidente.fecha_sol | date: 'dd/MM/yyyy'}}</td>
-            <td>{{incidente.descrip }}</td>
+            <td>{{incidente.descrip}}</td>
             <td style="text-align: center;">{{incidente.estado}}</td>
+            <td style="text-align: center;">{{incidente.open_project_id}}</td>
+            <td style="text-align: center;"><span *ngIf="incidente.open_project_status" [class]="'incidente-badge status-' + incidente.open_project_status.toLowerCase()">{{incidente.open_project_status}}</span></td>
             <td>
-                <p-dropdown [options]="projects"  [(ngModel)]="incidente.project" optionLabel="name" 
+                <p-progressBar [value]="incidente.open_project_percentage_done" [showValue]="false" [style]="{'height': '6px'}"></p-progressBar>
+            </td>
+            <td style="text-align: center;">{{incidente.open_project_assignee}}</td>
+            <td *ngIf="!incidente.open_project_title">
+                <p-dropdown [options]="projects"  [(ngModel)]="incidente.project"  optionLabel="name"
                     [showClear]="true" placeholder="Seleccione un proyecto...">
                 </p-dropdown>
             </td>
+            <td style="text-align: center;" *ngIf="incidente.open_project_title">{{incidente.open_project_title}}</td>
             <td>
                 <button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded" pTooltip="Enviar a Open Project"
-                    (click)="sendOpenProject(incidente)" [disabled]="!incidente.project">
+                    (click)="sendOpenProject(incidente)" [disabled]="!incidente.project || incidente.open_project_id">
                 </button>                
             </td>            
         </tr>
     </ng-template>
     <ng-template pTemplate="paginatorleft">
-        <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="getIncidentes()"></p-button>
+        <button pButton pRipple type="button" label="Incidentes" class="p-button-secondary p-button-text"></button>    
+        <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="findIncidentes()"></p-button>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>

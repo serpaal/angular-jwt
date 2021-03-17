@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { formatDate } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Project } from '../open-project/project';
@@ -17,30 +18,82 @@ import { OpenProjectService } from '../services/open-project.service';
 export class IncidentesComponent implements OnInit, OnDestroy {
  
   incidentes: Incidentes[] = [];
-  loading: boolean = true;
+  assignee: any[] = [];
   selectedIncidente: Incidentes; 
   projects: Project[] = [];
   selectedProject: Project;    
 
-  constructor(private incidentesService: IncidentesService, private openProjectService: OpenProjectService, private messageService: MessageService) { }
+  constructor(
+    private incidentesService: IncidentesService, 
+    private openProjectService: OpenProjectService, 
+    private messageService: MessageService,
+    private spinner: NgxSpinnerService,
+  ) { }
 
   ngOnInit(): void {   
-    this.getIncidentes();  
+    this.findIncidentes({cod_u_rbl: "VBUS01"});  
     this.getProjects(); 
   }
 
-  getIncidentes(): void {
-    this.incidentesService.getIncidentes()
-    .subscribe(res => {
-      this.incidentes = res;
-      this.loading = false;
-    });
-  }
+  findIncidentes(params): void {
+    this.assignee = [];
+    this.spinner.show();
+    this.incidentesService.findIncidentes(params).subscribe(res => {
+      this.incidentesService.setIncidentesJson({incidentes_json: JSON.stringify(res)}).subscribe(res => {
+        this.incidentesService.getIncidentes(params).subscribe(res =>{
+          this.incidentes = res;
+          for(let incidente of this.incidentes){
+            if(incidente.open_project_id){
+              const id:number = +incidente.open_project_id;
+              this.getWorkerPackage(id, incidente).then(data =>{
+                const checkAssigneeExistence = assigneeParam => this.assignee.some( ({value}) => value == assigneeParam);
+                if(!checkAssigneeExistence(data.open_project_assignee.toString()))
+                  this.assignee.push({ label: data.open_project_assignee.toString(), value: data.open_project_assignee.toString() });
+              
+                this.incidentesService.updateIncidente(data.id, data).subscribe(res =>{
+                  setTimeout(() => {
+                    this.spinner.hide();
+                  }, 1000);
+                }, err =>  {
+                  this.messageService.add({severity: 'error', summary: 'Actualizar Incidente', detail: err.message });
+                  this.spinner.hide();
+                })
+              }, err =>  {
+                this.messageService.add({severity: 'error', summary: 'Incidente Open Project', detail: err.message });
+                this.spinner.hide();
+              })              
+            }
+          }
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 1000);               
+        }, err =>  {
+          this.messageService.add({severity: 'error', summary: 'Get Incidentes Mesa Ayuda', detail: err.message });
+          this.spinner.hide();
+        })       
+      }, err =>  {
+        this.messageService.add({severity: 'error', summary: 'Set Incidentes JSON Mesa Ayuda', detail: err.message });
+        this.spinner.hide();
+      })     
+    }, err =>  {
+      this.messageService.add({severity: 'error', summary: 'Buscar Incidentes Mesa Ayuda', detail: err.message });
+      this.spinner.hide();
+    })   
+  }     
 
   getProjects(): void {
     this.openProjectService.getProjects()
     .then(data => {
       this.projects = data;
+    });
+  }
+
+  getWorkerPackage(id: number, incidente: Incidentes): any {
+    return this.openProjectService.getWorkPackage(id).then(res => {
+      incidente.open_project_status = res._embedded.status.name.replace(' ', '-');
+      incidente.open_project_percentage_done = res.percentageDone;
+      incidente.open_project_assignee = res._embedded.assignee ? res._embedded.assignee.name : null;       
+      return incidente;
     });
   }
 
@@ -93,17 +146,28 @@ export class IncidentesComponent implements OnInit, OnDestroy {
           }
       }
     };
-    this.loading = true;
+    this.spinner.show();
     this.openProjectService.setWorkPackage(payload)
     .then(data => {
-        this.loading = false;
-       this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'})
+      record.open_project_id = data.id.toString();
+      record.open_project_title = data._links.project.title;
+      record.open_project_status = data._links.status.title;
+
+      setTimeout(() => {
+        this.spinner.hide();
+      }, 1000);
+     
+      this.incidentesService.updateIncidente(record.id, record).subscribe(res => {
+        this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
+      });    
+    }, err =>  {
+      this.messageService.add({severity: 'error', summary: 'Crear User Story Open Project', detail: err.message });
+      this.spinner.hide();
     });
   }  
 
   ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
-    //this.dtTrigger.unsubscribe();
   }
+
 
 }

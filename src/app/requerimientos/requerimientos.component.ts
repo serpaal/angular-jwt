@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import { formatDate } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Requerimientos } from './requerimientos';
@@ -13,36 +15,57 @@ import { Project } from '../open-project/project';
   providers: [MessageService]
 })
 export class RequerimientosComponent implements OnInit {
-  loading: boolean = true;
   requerimientos: Requerimientos[] = [];
   selectedRequerimiento: Requerimientos;
-  projects: Project[] = [];
+  projects: Project[] = []; 
+  assignee: any[] = [];
   selectedProject: Project;
   
-  constructor(private requerimientosService: RequerimientosService, private openProjectService: OpenProjectService, private messageService: MessageService) { }
+  constructor(
+    private spinner: NgxSpinnerService,
+    private requerimientosService: RequerimientosService, 
+    private openProjectService: OpenProjectService, 
+    private messageService: MessageService
+  ) { }
 
-  ngOnInit(): void {  
-    this.findRequerimientos();  
-    this.getProjects();
+  ngOnInit() {    
+    this.getProjects();  
+    this.findRequerimientos({cod_u_rbl: "VBUS01"}); 
   }
 
-  findRequerimientos(): void {
-    this.requerimientosService.findRequerimientos().subscribe(res => {
+  findRequerimientos(params): void {
+    this.spinner.show();
+    this.assignee = [];
+    this.requerimientosService.findRequerimientos(params).subscribe(res => {
       this.requerimientosService.setRequerimientosJson({requerimientos_json: JSON.stringify(res)}).subscribe(res => {
-        this.requerimientosService.getRequerimientos().subscribe(res =>{
-          this.loading = false;
+        this.requerimientosService.getRequerimientos(params).subscribe(res =>{
           this.requerimientos = res;
-        })
-       
+          for(let requerimiento of this.requerimientos){
+            if(requerimiento.open_project_id){
+              const id:number = +requerimiento.open_project_id;
+              this.getWorkerPackage(id, requerimiento).then(data =>{
+                const checkAssigneeExistence = assigneeParam => this.assignee.some( ({value}) => value == assigneeParam);
+                if(!checkAssigneeExistence(data.open_project_assignee.toString()))
+                  this.assignee.push({ label: data.open_project_assignee.toString(), value: data.open_project_assignee.toString() });
+                this.requerimientosService.updateRequerimiento(data.id, data).subscribe(res =>{
+                  setTimeout(() => {
+                    this.spinner.hide();
+                  }, 1000);
+                }, function(e){
+                  setTimeout(() => {
+                    this.spinner.hide();
+                  }, 1000);
+                })
+              })              
+            }
+          }
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 1000);               
+        })       
       })     
-    })
-   
-    /*  .then(data => {
-        this.loading = false;
-        this.requerimientos = data;
-        this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
-    });*/
-  } 
+    })   
+  }   
 
   getProjects(): void {
     this.openProjectService.getProjects()
@@ -50,6 +73,15 @@ export class RequerimientosComponent implements OnInit {
       this.projects = data;
     });
   }  
+
+  getWorkerPackage(id: number, requerimiento: Requerimientos): any {
+    return this.openProjectService.getWorkPackage(id).then(res => {
+      requerimiento.open_project_status = res._embedded.status.name.replace(' ', '-');
+      requerimiento.open_project_percentage_done = res.percentageDone;
+      requerimiento.open_project_assignee = res._embedded.assignee ? res._embedded.assignee.name : null;       
+      return requerimiento;
+    });
+  }
 
   sendOpenProject(record): void {
     let payload = {
@@ -100,13 +132,18 @@ export class RequerimientosComponent implements OnInit {
           }
       }
     };
-    this.loading = true;
+    this.spinner.show();
+    
     this.openProjectService.setWorkPackage(payload)
     .then(data => {
-        this.loading = false;
         record.open_project_id = data.id.toString();
         record.open_project_title = data._links.project.title;
         record.open_project_status = data._links.status.title;
+
+        setTimeout(() => {
+          this.spinner.hide();
+        }, 1000);
+       
         this.requerimientosService.updateRequerimiento(record.id, record).subscribe(res => {
           this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
         });  

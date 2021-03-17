@@ -1,3 +1,4 @@
+import { Project } from "../open-project/project";
 
 export interface Requerimientos {
    id: number;  
@@ -13,6 +14,8 @@ export interface Requerimientos {
    open_project_id?: string;
    open_project_title?: string;
    open_project_status?: string;
+   open_project_percentage_done: number,
+   open_project_assignee: string,
    username: string;  
    created_at?: Date;
    updated_at?: Date;

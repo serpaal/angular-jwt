@@ -2,19 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtStorageService } from './jwt-storage.service';
 import { Project } from '../open-project/project';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OpenProjectService {
-   
+  
+
   
    constructor(private jwtService: JwtStorageService, private http: HttpClient) { }
- 
+  
    getProjects()  {      
-    //const url = 'http://elflap03.elfec.com:88/OpenProject/api/v3/projects';
-    const url = 'http://127.0.0.1:8080/api/v3/projects';
-    const auth = window.btoa('apikey' + ':' + '9efc25bc5b43f6c17579c5e4615124886c18cbf2ff18bb5dc409e163a3984986');    
+    const url = environment.hostOpenProject.concat(environment.endpoints["projects"]);
+      
+    const auth = window.btoa('apikey' + ':' + environment.apiKey); 
     const headers = { 'Authorization': `Basic ${auth}` };
     
 
@@ -25,15 +27,30 @@ export class OpenProjectService {
    } 
 
    setWorkPackage(payload: any){
-    const url = 'http://127.0.0.1:8080/api/v3/work_packages';
-    const auth = window.btoa('apikey' + ':' + '9efc25bc5b43f6c17579c5e4615124886c18cbf2ff18bb5dc409e163a3984986');    
-    
+   
+
+    const url = environment.hostOpenProject.concat(environment.endpoints["workPackages"]);
+
+    const auth = window.btoa('apikey' + ':' + environment.apiKey); 
     const headers = { 'Authorization': `Basic ${auth}` };
+   
      return this.http.post<any>(`${url}`, payload, { headers })
      .toPromise()
      .then(response => { 
-       console.dir('response');
        return response; 
+      });
+   }
+
+   getWorkPackage(id: number): any{
+      const url = environment.hostOpenProject.concat(environment.endpoints["workPackages"], '/', id.toString());
+
+      const auth = window.btoa('apikey' + ':' + environment.apiKey); 
+      const headers = { 'Authorization': `Basic ${auth}` };
+      
+      return this.http.get<any>(`${url}`, { headers })
+        .toPromise()
+        .then(response => { 
+          return response; 
       });
    }
    

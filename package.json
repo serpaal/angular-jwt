@@ -27,6 +27,7 @@
     "datatables.net-dt": "^1.10.20",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
+    "ngx-spinner": "^10.0.1",
     "primeicons": "^4.1.0",
     "primeng": "^11.1.0",
     "rxjs": "~6.6.0",
