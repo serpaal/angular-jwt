@@ -1,0 +1,35 @@
+<p-dialog header="Open Project" [(visible)]="display" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+    <p></p>
+    <div class="p-fluid">
+        <div class="p-field">
+            <label for="workpackage">Proyecto</label>
+            <p-dropdown id="workpackage" [options]="projects"  [(ngModel)]="selectedProject"  optionLabel="name"
+                [showClear]="true" placeholder="Seleccione un proyecto...">
+            </p-dropdown> 
+        </div>
+        <div class="p-field">
+            <label for="fase">Fase</label>
+            <p-dropdown id="fase" [options]="phases"  [(ngModel)]="selectedPhase"  optionLabel="subject"
+                [showClear]="true" placeholder="Seleccionar...">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="asignado">Asginado</label>
+            <p-dropdown id="asignado" [options]="users"  [(ngModel)]="selectedUser"  optionLabel="name"
+                [showClear]="true" placeholder="Seleccionar...">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="prioridad">Prioridad</label>
+            <p-dropdown id="prioridad" [options]="priorities"  [(ngModel)]="selectedPriority"  optionLabel="name"
+                [showClear]="true" placeholder="Seleccionar...">
+            </p-dropdown>
+        </div>
+        <p style="padding:80px;"></p>
+    </div>   
+    
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displayModal=false" label="Enviar" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>

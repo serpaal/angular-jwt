@@ -31,11 +31,12 @@ export class IncidentesComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {   
-    this.findIncidentes({cod_u_rbl: "VBUS01"});  
+    this.findIncidentes();  
     this.getProjects(); 
   }
 
-  findIncidentes(params): void {
+  findIncidentes(): void {
+    let params = {cod_u_rbl: "VBUS01"};
     this.assignee = [];
     this.spinner.show();
     this.incidentesService.findIncidentes(params).subscribe(res => {
@@ -47,7 +48,7 @@ export class IncidentesComponent implements OnInit, OnDestroy {
               const id:number = +incidente.open_project_id;
               this.getWorkerPackage(id, incidente).then(data =>{
                 const checkAssigneeExistence = assigneeParam => this.assignee.some( ({value}) => value == assigneeParam);
-                if(!checkAssigneeExistence(data.open_project_assignee.toString()))
+                if(data.open_project_assignee && !checkAssigneeExistence(data.open_project_assignee.toString()))
                   this.assignee.push({ label: data.open_project_assignee.toString(), value: data.open_project_assignee.toString() });
               
                 this.incidentesService.updateIncidente(data.id, data).subscribe(res =>{

@@ -1,7 +1,7 @@
 <p-toast position="top-right"></p-toast>
 <div class="card">
   <p-table #dt [value]="requerimientos" selectionMode="single" [(selection)]="selectedRequerimiento" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" 
-    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" [loading]="loading"
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" 
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
     [filterDelay]="0" [globalFilterFields]="['nro_req','justific','nomb_comp']">
     <ng-template pTemplate="caption">
@@ -32,7 +32,7 @@
                     Asignado
                     <p-columnFilter field="open_project_assignee" matchMode="equals" display="menu">
                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                            <p-dropdown [ngModel]="value" [options]="assignee" (onChange)="filter($event.value)" placeholder="Any">
+                            <p-dropdown [ngModel]="value" [options]="assignee" (onChange)="filter($event.value)" placeholder="Seleccione">
                                 <ng-template let-option pTemplate="item">
                                     <span >{{option.label}}</span>
                                 </ng-template>
@@ -67,7 +67,7 @@
             </td>
             <td style="text-align: center;" *ngIf="requerimiento.open_project_title">{{requerimiento.open_project_title}}</td>
             <td>
-                <button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded" pTooltip="Enviar a Open Project"
+                <button pButton pRipple type="button" icon="pi pi-send"  class="p-button-rounded p-button-success" pTooltip="Enviar a Open Project"
                     (click)="sendOpenProject(requerimiento)" [disabled]="!requerimiento.project || requerimiento.open_project_id">
                 </button>                
             </td>            
@@ -84,3 +84,39 @@
     </ng-template>
   </p-table> 
 </div>
+
+<p-dialog header="Open Project" [(visible)]="display" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+    <p></p>
+    <div class="p-fluid">
+        <div class="p-field">
+            <label for="workpackage">Proyecto</label>
+            <p-dropdown id="workpackage" [options]="projects"  [(ngModel)]="selectedProject" (onChange)="workpackageSelected()"  optionLabel="name"
+                [showClear]="true" placeholder="Seleccione un proyecto...">
+            </p-dropdown> 
+        </div>
+        <div class="p-field">
+            <label for="fase">Fase</label>
+            <p-dropdown id="fase" [options]="phases"  [(ngModel)]="selectedPhase"  optionLabel="subject"  [disabled]="!selectedProject"
+                [showClear]="true" placeholder="Seleccionar...">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="asignado">Asginado</label>
+            <p-dropdown id="asignado" [options]="users"  [(ngModel)]="selectedUser"  optionLabel="name"
+                [showClear]="true" placeholder="Seleccionar...">
+            </p-dropdown>
+        </div>
+        <div class="p-field">
+            <label for="prioridad">Prioridad</label>
+            <p-dropdown id="prioridad" [options]="priorities"  [(ngModel)]="selectedPriority"  optionLabel="name"
+                [showClear]="true" placeholder="Seleccionar...">
+            </p-dropdown>
+        </div>
+        <p style="padding:70px;"></p>
+    </div>   
+    
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displayModal=false" label="Enviar" styleClass="p-button-text" [disabled]="!selectedProject"></p-button>
+    </ng-template>
+</p-dialog>

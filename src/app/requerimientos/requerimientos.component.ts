@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import { formatDate } from '@angular/common';
@@ -17,10 +17,22 @@ import { Project } from '../open-project/project';
 export class RequerimientosComponent implements OnInit {
   requerimientos: Requerimientos[] = [];
   selectedRequerimiento: Requerimientos;
-  projects: Project[] = []; 
-  assignee: any[] = [];
-  selectedProject: Project;
-  
+  assignee:any[] = [];
+
+
+  projects:Project[] = []; 
+  phases:any = [];
+  priorities: any = [];
+  users: any = [];
+
+  selectedProject:Project; 
+  selectedPhase:any; 
+  selectedPriority: any;
+  selectedUser: any;
+
+
+  display:boolean = false;
+
   constructor(
     private spinner: NgxSpinnerService,
     private requerimientosService: RequerimientosService, 
@@ -29,13 +41,18 @@ export class RequerimientosComponent implements OnInit {
   ) { }
 
   ngOnInit() {    
+    this.display = false;
     this.getProjects();  
-    this.findRequerimientos({cod_u_rbl: "VBUS01"}); 
+    this.getPhases("2");
+    this.getPriorities();
+    this.getUsers();
+    this.findRequerimientos(); 
   }
 
-  findRequerimientos(params): void {
+  findRequerimientos(): void {
     this.spinner.show();
     this.assignee = [];
+    let params = {cod_u_rbl: "VBUS01"};
     this.requerimientosService.findRequerimientos(params).subscribe(res => {
       this.requerimientosService.setRequerimientosJson({requerimientos_json: JSON.stringify(res)}).subscribe(res => {
         this.requerimientosService.getRequerimientos(params).subscribe(res =>{
@@ -45,7 +62,7 @@ export class RequerimientosComponent implements OnInit {
               const id:number = +requerimiento.open_project_id;
               this.getWorkerPackage(id, requerimiento).then(data =>{
                 const checkAssigneeExistence = assigneeParam => this.assignee.some( ({value}) => value == assigneeParam);
-                if(!checkAssigneeExistence(data.open_project_assignee.toString()))
+                if(data.open_project_assignee && !checkAssigneeExistence(data.open_project_assignee.toString()))
                   this.assignee.push({ label: data.open_project_assignee.toString(), value: data.open_project_assignee.toString() });
                 this.requerimientosService.updateRequerimiento(data.id, data).subscribe(res =>{
                   setTimeout(() => {
@@ -74,6 +91,32 @@ export class RequerimientosComponent implements OnInit {
     });
   }  
 
+  workpackageSelected(){
+    if(this.selectedProject)
+      this.getPhases(this.selectedProject.id.toString())
+  }
+
+  getPhases(work_packages_id:string): void {
+    this.openProjectService.getPhases(work_packages_id)
+    .then(data => {
+      this.phases = data;
+    });
+  }  
+
+  getPriorities(): void {
+    this.openProjectService.getPriorities()
+    .then(data => {
+      this.priorities = data;
+    });
+  } 
+
+  getUsers(): void {
+    this.openProjectService.getusers()
+    .then(data => {
+      this.users = data;
+    });
+  } 
+
   getWorkerPackage(id: number, requerimiento: Requerimientos): any {
     return this.openProjectService.getWorkPackage(id).then(res => {
       requerimiento.open_project_status = res._embedded.status.name.replace(' ', '-');
@@ -83,7 +126,8 @@ export class RequerimientosComponent implements OnInit {
     });
   }
 
-  sendOpenProject(record): void {
+  sendOpenProject(record) {
+    return this.display = true;
     let payload = {
       subject: record.nro_req,
       description: {
@@ -127,8 +171,8 @@ export class RequerimientosComponent implements OnInit {
               href: null
           },
           parent: {
-              href: null,
-              title: null
+            href: "/api/v3/work_packages/64",
+            title: "Fase 1"
           }
       }
     };

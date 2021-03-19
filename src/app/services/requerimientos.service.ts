@@ -63,7 +63,6 @@ export class RequerimientosService {
     //formData.append("requerimientos_json", params['requerimientos_json']);
     /*const headers = { 'Authorization': 'Bearer ' + this.jwtService.getToken() };
     return this.http.get<any>(`${this.url}`, { headers });*/
-    console.log('acutalizar requerimiento');
     return this.http.put(`${url}`, params);   
   }
  

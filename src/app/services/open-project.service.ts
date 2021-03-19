@@ -26,6 +26,46 @@ export class OpenProjectService {
      .then(data => { return data; });
    } 
 
+   getPhases(id:string)  {      
+    const filter = `/${id}/work_packages?filters=[{"type_id":{"operator":"=","values":["3"]}}]&pageSize=1000`;    
+    const url = environment.hostOpenProject.concat(environment.endpoints["projects"], filter);   
+      
+    const auth = window.btoa('apikey' + ':' + environment.apiKey); 
+    const headers = { 'Authorization': `Basic ${auth}` };    
+    
+     return this.http.get<any>(`${url}`, { headers })
+     .toPromise()
+     .then(res =>res._embedded.elements)
+     .then(data => { return data; });
+   } 
+
+   getPriorities(){
+       
+    const url = environment.hostOpenProject.concat('/priorities');   
+      
+    const auth = window.btoa('apikey' + ':' + environment.apiKey); 
+    const headers = { 'Authorization': `Basic ${auth}` };    
+    
+     return this.http.get<any>(`${url}`, { headers })
+     .toPromise()
+     .then(res =>res._embedded.elements)
+     .then(data => { return data; });
+   }
+   
+   getusers(){
+       
+    const url = environment.hostOpenProject.concat('/users');   
+      
+    const auth = window.btoa('apikey' + ':' + environment.apiKey); 
+    const headers = { 'Authorization': `Basic ${auth}` };    
+    
+     return this.http.get<any>(`${url}`, { headers })
+     .toPromise()
+     .then(res =>res._embedded.elements)
+     .then(data => { return data; });
+   }
+   
+
    setWorkPackage(payload: any){
    
 
