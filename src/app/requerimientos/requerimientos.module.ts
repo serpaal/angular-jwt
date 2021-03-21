@@ -12,10 +12,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import { CustomDatePipe } from '../pipes/custom-date.pipe';
 import {ToastModule} from 'primeng/toast';
 import {ProgressBarModule} from 'primeng/progressbar';
-import { DialogModule } from 'primeng/dialog';
-
-
-
+import { OpenProjectModule } from '../open-project/open-project.module';
 
 @NgModule({
   declarations: [RequerimientosComponent, CustomDatePipe],
@@ -31,7 +28,7 @@ import { DialogModule } from 'primeng/dialog';
     DropdownModule,
     ToastModule,
     ProgressBarModule,
-    DialogModule
+    OpenProjectModule
   ],
   exports: [CustomDatePipe]
 })

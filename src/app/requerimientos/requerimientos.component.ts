@@ -14,9 +14,11 @@ import { Project } from '../open-project/project';
   styleUrls: ['./requerimientos.component.css'],
   providers: [MessageService]
 })
+
 export class RequerimientosComponent implements OnInit {
   requerimientos: Requerimientos[] = [];
   selectedRequerimiento: Requerimientos;
+  esRequerimiento: boolean;
   assignee:any[] = [];
 
 
@@ -31,7 +33,7 @@ export class RequerimientosComponent implements OnInit {
   selectedUser: any;
 
 
-  display:boolean = false;
+  displayModal:boolean = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -41,11 +43,8 @@ export class RequerimientosComponent implements OnInit {
   ) { }
 
   ngOnInit() {    
-    this.display = false;
-    this.getProjects();  
-    this.getPhases("2");
-    this.getPriorities();
-    this.getUsers();
+    this.displayModal = false;
+    this.esRequerimiento = true;
     this.findRequerimientos(); 
   }
 
@@ -82,40 +81,22 @@ export class RequerimientosComponent implements OnInit {
         })       
       })     
     })   
-  }   
-
-  getProjects(): void {
-    this.openProjectService.getProjects()
-    .then(data => {
-      this.projects = data;
-    });
-  }  
-
-  workpackageSelected(){
-    if(this.selectedProject)
-      this.getPhases(this.selectedProject.id.toString())
+  }    
+  
+  sendOpenProject(record) {
+    this.selectedRequerimiento = record;
+    this.displayModal = true;
   }
 
-  getPhases(work_packages_id:string): void {
-    this.openProjectService.getPhases(work_packages_id)
-    .then(data => {
-      this.phases = data;
-    });
-  }  
-
-  getPriorities(): void {
-    this.openProjectService.getPriorities()
-    .then(data => {
-      this.priorities = data;
-    });
-  } 
-
-  getUsers(): void {
-    this.openProjectService.getusers()
-    .then(data => {
-      this.users = data;
-    });
-  } 
+  dismissModal(ev){
+    this.displayModal = false;
+    if(!ev.isSaved)
+      return;
+    
+    this.requerimientosService.updateRequerimiento(ev.requerimiento.id, ev.requerimiento).subscribe(res => {
+      this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
+    });  
+  }
 
   getWorkerPackage(id: number, requerimiento: Requerimientos): any {
     return this.openProjectService.getWorkPackage(id).then(res => {
@@ -123,74 +104,6 @@ export class RequerimientosComponent implements OnInit {
       requerimiento.open_project_percentage_done = res.percentageDone;
       requerimiento.open_project_assignee = res._embedded.assignee ? res._embedded.assignee.name : null;       
       return requerimiento;
-    });
-  }
-
-  sendOpenProject(record) {
-    return this.display = true;
-    let payload = {
-      subject: record.nro_req,
-      description: {
-          format: "markdown",
-          raw: record.justific,
-          html: ""
-      },
-      scheduleManually: false,
-      startDate: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
-      dueDate: null,
-      estimatedTime: null,
-      percentageDone: 0,
-      remainingTime: null,
-      _links: {
-          category: {
-              href: null
-          },
-          type: {
-              href: "/api/v3/types/6",
-              title: "User story"
-          },
-          priority: {
-              href: "/api/v3/priorities/8",
-              title: "Normal"
-          },
-          project: {
-              href: record.project._links.self.href,
-              title: record.project._links.self.title
-          },
-          status: {
-              href: "/api/v3/statuses/1",
-              title: "New"
-          },
-          responsible: {
-              href: null
-          },
-          assignee: {
-              href: null
-          },
-          version: {
-              href: null
-          },
-          parent: {
-            href: "/api/v3/work_packages/64",
-            title: "Fase 1"
-          }
-      }
-    };
-    this.spinner.show();
-    
-    this.openProjectService.setWorkPackage(payload)
-    .then(data => {
-        record.open_project_id = data.id.toString();
-        record.open_project_title = data._links.project.title;
-        record.open_project_status = data._links.status.title;
-
-        setTimeout(() => {
-          this.spinner.hide();
-        }, 1000);
-       
-        this.requerimientosService.updateRequerimiento(record.id, record).subscribe(res => {
-          this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
-        });  
     });
   } 
   

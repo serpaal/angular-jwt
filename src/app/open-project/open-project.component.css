@@ -1,0 +1,22 @@
+*:host ::ng-deep .p-field {
+    padding-top: 7px;
+}
+
+*:host ::ng-deep .p-dialog .p-dialog-header {
+    border-bottom: 1px solid #7B95A3;
+    background: #7B95A3;
+    color: #ffffff;
+    padding: 1rem;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+}
+
+*:host ::ng-deep .p-dialog .p-dialog-footer {
+    border-top: 1px solid #dadada;
+    background: #ffffff;
+    color: #666666;
+    padding: 0.571rem 1rem;
+    text-align: right;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}

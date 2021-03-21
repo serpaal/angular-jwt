@@ -1,6 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { formatDate } from '@angular/common';
 import { OpenProjectService } from '../services/open-project.service';
+import { OpenProject } from './open-project';
 import { Project } from './project';
+import { Incidentes } from '../incidentes/incidentes';
+import { Requerimientos } from '../requerimientos/requerimientos';
 
 @Component({
   selector: 'modal-open-project',
@@ -8,14 +12,18 @@ import { Project } from './project';
   styleUrls: ['./open-project.component.css']
 })
 export class OpenProjectComponent implements OnInit {
-  @Input() display:boolean;
+  @Input() display:boolean; 
+  @Input() requerimiento: Requerimientos;
+  @Input() incidente: Incidentes;
+  @Input() esRequerimiento: boolean;
+  @Output() dismissModal: EventEmitter<OpenProject> = new EventEmitter<OpenProject>();
 
-  projects:Project[] = []; 
+  projects:any[] = []; 
   phases:any = [];
   priorities: any = [];
   users: any = [];
 
-  selectedProject:Project; 
+  selectedProject:any; 
   selectedPhase:any; 
   selectedPriority: any;
   selectedUser: any;
@@ -23,7 +31,9 @@ export class OpenProjectComponent implements OnInit {
   constructor(private openProjectService: OpenProjectService) { }
 
   ngOnInit(): void {
-     
+     this.getProjects();
+     this.getPriorities(); 
+     this.getUsers();
   }
 
   getProjects(): void {
@@ -32,6 +42,12 @@ export class OpenProjectComponent implements OnInit {
       this.projects = data;
     });
   }  
+
+  workpackageSelected(){
+    if(this.selectedProject){
+      this.getPhases(this.selectedProject.id.toString())
+    }   
+  }
 
   getPhases(work_packages_id:string): void {
     this.openProjectService.getPhases(work_packages_id)
@@ -52,7 +68,109 @@ export class OpenProjectComponent implements OnInit {
     .then(data => {
       this.users = data;
     });
-  } 
+  }
+  
+  sendOpenProject() {
+    let payload = {
+      subject: this.esRequerimiento ? this.requerimiento.nro_req : this.incidente.nro_inc,
+      description: {
+          format: "markdown",
+          raw: this.esRequerimiento ? this.requerimiento.justific : this.incidente.descrip,
+          html: ""
+      },
+      scheduleManually: false,
+      startDate: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
+      dueDate: null,
+      estimatedTime: null,
+      percentageDone: 0,
+      remainingTime: null,
+      _links: {
+          category: {
+              href: null
+          },
+          type: {
+              href: "/api/v3/types/6",
+              title: "User story"
+          },
+          priority: {
+              href: this.selectedPriority ? this.selectedPriority._links.self.href : "/api/v3/priorities/8",
+              title: this.selectedPriority ? this.selectedPriority._links.self.title : "Normal"
+          },
+          project: {
+              href: this.selectedProject._links.self.href,
+              title: this.selectedProject._links.self.title
+          },
+          status: {
+              href: "/api/v3/statuses/1",
+              title: "New"
+          },
+          responsible: {
+              href: null
+          },
+          assignee: {
+              href: this.selectedUser ? this.selectedUser._links.self.href : null,
+              title: this.selectedUser ? this.selectedUser._links.self.title : null
+          },
+          version: {
+              href: null
+          },
+          parent: {
+            href: this.selectedPhase ? this.selectedPhase._links.self.href : null,
+            title: this.selectedPhase ? this.selectedPhase._links.self.title : null
+          }
+      }
+    };
+    //this.spinner.show();
+    
+    this.openProjectService.setWorkPackage(payload)
+    .then(data => {
+      if(this.esRequerimiento){
+        this.requerimiento.open_project_id = data.id.toString();
+        this.requerimiento.open_project_title = data._links.project.title;
+        this.requerimiento.open_project_status = data._links.status.title; 
+        this.requerimiento.open_project_percentage_done = data.percentageDone;
+        this.requerimiento.open_project_assignee = data._links.assignee.title;
+        this.requerimiento.open_project_priority = data._links.priority.title;
+      } else {
+        this.incidente.open_project_id = data.id.toString();
+        this.incidente.open_project_title = data._links.project.title;
+        this.incidente.open_project_status = data._links.status.title; 
+        this.incidente.open_project_percentage_done = data.percentageDone;
+        this.incidente.open_project_assignee = data._links.assignee.title;
+        this.incidente.open_project_priority = data._links.priority.title;
+      }    
+      
+      this.dismissModal.emit({
+        requerimiento: this.requerimiento,
+        incidente: this.incidente,
+        esRequerimiento: this.esRequerimiento,
+        isSaved: true
+      });
 
+        //setTimeout(() => {
+          //this.spinner.hide();
+        //}, 1000);
+       
+        //this.requerimientosService.updateRequerimiento(record.id, record).subscribe(res => {
+        ///  this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
+       // });  
+    });
+  } 
+  showModal(){
+    this.selectedProject = null;
+    this.selectedPhase = null;
+    this.selectedUser = null;
+    this.selectedPriority = null;    
+  }
+  
+  closeModal(){
+    this.display = false;
+    this.dismissModal.emit({
+      requerimiento: this.requerimiento,
+      incidente: this.incidente,
+      esRequerimiento: this.esRequerimiento,
+      isSaved: false
+    });
+  }
 
 }

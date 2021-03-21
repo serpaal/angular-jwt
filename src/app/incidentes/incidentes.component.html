@@ -40,7 +40,7 @@
                     </p-columnFilter>
                 </div>
             </th>
-            <th>Open Project</th>
+            <!--<th>Open Project</th>-->
             <th></th>
         </tr>
     </ng-template>
@@ -58,15 +58,15 @@
                 <p-progressBar [value]="incidente.open_project_percentage_done" [showValue]="false" [style]="{'height': '6px'}"></p-progressBar>
             </td>
             <td style="text-align: center;">{{incidente.open_project_assignee}}</td>
-            <td *ngIf="!incidente.open_project_title">
+            <!--<td *ngIf="!incidente.open_project_title">
                 <p-dropdown [options]="projects"  [(ngModel)]="incidente.project"  optionLabel="name"
                     [showClear]="true" placeholder="Seleccione un proyecto...">
                 </p-dropdown>
             </td>
-            <td style="text-align: center;" *ngIf="incidente.open_project_title">{{incidente.open_project_title}}</td>
+            <td style="text-align: center;" *ngIf="incidente.open_project_title">{{incidente.open_project_title}}</td>-->
             <td>
                 <button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded p-button-success" pTooltip="Enviar a Open Project"
-                    (click)="sendOpenProject(incidente)" [disabled]="!incidente.project || incidente.open_project_id">
+                    (click)="sendOpenProject(incidente)" [disabled]="incidente.open_project_id">
                 </button>                
             </td>            
         </tr>
@@ -82,3 +82,9 @@
     </ng-template>
   </p-table> 
 </div>
+<modal-open-project  style="z-index: 10000;" 
+[display]="displayModal" 
+[esRequerimiento]="esRequerimiento" 
+[incidente]="selectedIncidente" 
+(dismissModal)="dismissModal($event)">
+</modal-open-project>

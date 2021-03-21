@@ -13,6 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
 import {ProgressBarModule} from 'primeng/progressbar';
+import { OpenProjectModule } from '../open-project/open-project.module';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {ProgressBarModule} from 'primeng/progressbar';
     InputTextModule,
     DropdownModule,
     ToastModule,
-    ProgressBarModule
+    ProgressBarModule,
+    OpenProjectModule
   ]
 })
 export class IncidentesModule { }

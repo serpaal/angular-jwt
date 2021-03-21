@@ -16,12 +16,12 @@ import { OpenProjectService } from '../services/open-project.service';
   providers: [MessageService]
 })
 export class IncidentesComponent implements OnInit, OnDestroy {
- 
+  displayModal:boolean = false;
+  esRequerimiento:boolean = false;
   incidentes: Incidentes[] = [];
   assignee: any[] = [];
   selectedIncidente: Incidentes; 
-  projects: Project[] = [];
-  selectedProject: Project;    
+  
 
   constructor(
     private incidentesService: IncidentesService, 
@@ -31,8 +31,9 @@ export class IncidentesComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {   
+    this.displayModal = false;
+    this.esRequerimiento = false;
     this.findIncidentes();  
-    this.getProjects(); 
   }
 
   findIncidentes(): void {
@@ -80,14 +81,8 @@ export class IncidentesComponent implements OnInit, OnDestroy {
       this.messageService.add({severity: 'error', summary: 'Buscar Incidentes Mesa Ayuda', detail: err.message });
       this.spinner.hide();
     })   
-  }     
-
-  getProjects(): void {
-    this.openProjectService.getProjects()
-    .then(data => {
-      this.projects = data;
-    });
-  }
+  }    
+ 
 
   getWorkerPackage(id: number, incidente: Incidentes): any {
     return this.openProjectService.getWorkPackage(id).then(res => {
@@ -98,74 +93,20 @@ export class IncidentesComponent implements OnInit, OnDestroy {
     });
   }
 
-  sendOpenProject(record): void {
-    let payload = {
-      subject: record.nro_inc,
-      description: {
-          format: "markdown",
-          raw: record.descrip,
-          html: ""
-      },
-      scheduleManually: false,
-      startDate: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
-      dueDate: null,
-      estimatedTime: null,
-      percentageDone: 0,
-      remainingTime: null,
-      _links: {
-          category: {
-              href: null
-          },
-          type: {
-              href: "/api/v3/types/6",
-              title: "User story"
-          },
-          priority: {
-              href: "/api/v3/priorities/8",
-              title: "Normal"
-          },
-          project: {
-              href: record.project._links.self.href,
-              title: record.project._links.self.title
-          },
-          status: {
-              href: "/api/v3/statuses/1",
-              title: "New"
-          },
-          responsible: {
-              href: null
-          },
-          assignee: {
-              href: null
-          },
-          version: {
-              href: null
-          },
-          parent: {
-              href: null,
-              title: null
-          }
-      }
-    };
-    this.spinner.show();
-    this.openProjectService.setWorkPackage(payload)
-    .then(data => {
-      record.open_project_id = data.id.toString();
-      record.open_project_title = data._links.project.title;
-      record.open_project_status = data._links.status.title;
+  sendOpenProject(record) {    
+    this.selectedIncidente = record;
+    this.displayModal = true;
+  }
 
-      setTimeout(() => {
-        this.spinner.hide();
-      }, 1000);
-     
-      this.incidentesService.updateIncidente(record.id, record).subscribe(res => {
-        this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
-      });    
-    }, err =>  {
-      this.messageService.add({severity: 'error', summary: 'Crear User Story Open Project', detail: err.message });
-      this.spinner.hide();
-    });
-  }  
+  dismissModal(ev){
+    this.displayModal = false;
+    if(!ev.isSaved)
+      return;
+    
+    this.incidentesService.updateIncidente(ev.incidente.id, ev.incidente).subscribe(res => {
+      this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
+    });  
+  }
 
   ngOnDestroy(): void {
   }

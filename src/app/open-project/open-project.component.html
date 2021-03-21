@@ -1,16 +1,16 @@
 <p-dialog header="Open Project" [(visible)]="display" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
-    [draggable]="false" [resizable]="false">
+    [draggable]="false" [resizable]="false" (onHide) = "closeModal()" (onShow) = showModal()>
     <p></p>
     <div class="p-fluid">
         <div class="p-field">
             <label for="workpackage">Proyecto</label>
-            <p-dropdown id="workpackage" [options]="projects"  [(ngModel)]="selectedProject"  optionLabel="name"
+            <p-dropdown id="workpackage" [options]="projects"  [(ngModel)]="selectedProject" (onChange)="workpackageSelected()"  optionLabel="name"
                 [showClear]="true" placeholder="Seleccione un proyecto...">
             </p-dropdown> 
         </div>
         <div class="p-field">
             <label for="fase">Fase</label>
-            <p-dropdown id="fase" [options]="phases"  [(ngModel)]="selectedPhase"  optionLabel="subject"
+            <p-dropdown id="fase" [options]="phases"  [(ngModel)]="selectedPhase"  optionLabel="subject"  [disabled]="!selectedProject"
                 [showClear]="true" placeholder="Seleccionar...">
             </p-dropdown>
         </div>
@@ -26,10 +26,10 @@
                 [showClear]="true" placeholder="Seleccionar...">
             </p-dropdown>
         </div>
-        <p style="padding:80px;"></p>
+        <p style="padding:70px;"></p>
     </div>   
     
     <ng-template pTemplate="footer">
-        <p-button icon="pi pi-check" (click)="displayModal=false" label="Enviar" styleClass="p-button-text"></p-button>
+        <p-button icon="pi pi-check" label="Enviar" styleClass="p-button-text" [disabled]="!selectedProject" (click)="sendOpenProject()"></p-button>
     </ng-template>
 </p-dialog>

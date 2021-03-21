@@ -12,4 +12,8 @@ export interface Incidentes {
     open_project_status?: string;
     open_project_percentage_done: number,
     open_project_assignee: string,
+    open_project_priority: string,
+    username: string;  
+    created_at?: Date;
+    updated_at?: Date;
 }
