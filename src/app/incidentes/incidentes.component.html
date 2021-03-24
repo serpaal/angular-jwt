@@ -1,4 +1,7 @@
 <p-toast position="top-right"></p-toast>
+<div class="layout-config">
+    <a tabindex="0" class="layout-config-button" (click)="findIncidentes()"><i class="pi pi-refresh"></i></a>
+</div>
 <div class="card">
   <p-table #dt [value]="incidentes" selectionMode="single" [(selection)]="selectedIncidente" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" 
     [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" 
@@ -45,8 +48,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-incidente>
-        <tr class="p-selectable-row">
-            <tr [pSelectableRow]="incidente">
+        <tr [pSelectableRow]="incidente">
             <td>{{incidente.nro_inc}}</td>
             <td>{{incidente.nomb_comp}}</td>
             <td style="text-align: center;">{{incidente.fecha_sol | date: 'dd/MM/yyyy'}}</td>
@@ -58,17 +60,22 @@
                 <p-progressBar [value]="incidente.open_project_percentage_done" [showValue]="false" [style]="{'height': '6px'}"></p-progressBar>
             </td>
             <td style="text-align: center;">{{incidente.open_project_assignee}}</td>
-            <!--<td *ngIf="!incidente.open_project_title">
-                <p-dropdown [options]="projects"  [(ngModel)]="incidente.project"  optionLabel="name"
-                    [showClear]="true" placeholder="Seleccione un proyecto...">
-                </p-dropdown>
-            </td>
-            <td style="text-align: center;" *ngIf="incidente.open_project_title">{{incidente.open_project_title}}</td>-->
-            <td>
+            <td *ngIf="!incidente.open_project_id">
                 <button pButton pRipple type="button" icon="pi pi-send" class="p-button-rounded p-button-success" pTooltip="Enviar a Open Project"
                     (click)="sendOpenProject(incidente)" [disabled]="incidente.open_project_id">
                 </button>                
-            </td>            
+            </td>    
+            <td style="text-align: center;" *ngIf="incidente.open_project_id">
+                <div *ngIf="incidente.open_project_priority" [class]="'starburst priority-' + incidente.open_project_priority.toLowerCase()">
+                    <span [class]="'starburst priority-' + incidente.open_project_priority.toLowerCase()">
+                        <span [class]="'starburst priority-' + incidente.open_project_priority.toLowerCase()">
+                            <span [class]="'starburst priority-' + incidente.open_project_priority.toLowerCase()">
+                            {{incidente.open_project_priority.charAt(0)}}
+                            </span>
+                        </span>
+                    </span>
+                </div>
+            </td>             
         </tr>
     </ng-template>
     <ng-template pTemplate="paginatorleft">

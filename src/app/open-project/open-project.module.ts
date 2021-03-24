@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToastModule } from 'primeng/toast';
 import { OpenProjectComponent } from './open-project.component';
 
 @NgModule({
@@ -13,7 +14,8 @@ import { OpenProjectComponent } from './open-project.component';
     FormsModule,
     DialogModule,
     ButtonModule,
-    DropdownModule
+    DropdownModule,
+    ToastModule
   ],
   exports: [OpenProjectComponent]
 })

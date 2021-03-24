@@ -1,4 +1,7 @@
 <p-toast position="top-right"></p-toast>
+<div class="layout-config">
+    <a tabindex="0" class="layout-config-button" (click)="findRequerimientos()"><i class="pi pi-refresh"></i></a>
+</div>
 <div class="card">
   <p-table #dt [value]="requerimientos" selectionMode="single" [(selection)]="selectedRequerimiento" [autoLayout]="true" [rowHover]="true" styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" 
     [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10,25,50]" 
@@ -41,13 +44,11 @@
                     </p-columnFilter>
                 </div>
             </th>
-            <!--<th>Open Project</th>-->
             <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-requerimiento>
-        <tr class="p-selectable-row">
-            <tr [pSelectableRow]="requerimiento">
+        <tr [pSelectableRow]="requerimiento">
             <td>{{requerimiento.nro_req}}</td>
             <td>{{requerimiento.nomb_comp}}</td>
             <td style="text-align: center;">{{requerimiento.fecha_sol | date: 'dd/MM/yyyy'}}</td>
@@ -59,18 +60,23 @@
             <td>
                 <p-progressBar [value]="requerimiento.open_project_percentage_done" [showValue]="false" [style]="{'height': '6px'}"></p-progressBar>
             </td>
-            <td style="text-align: center;">{{requerimiento.open_project_assignee}}</td>
-            <!--<td *ngIf="!requerimiento.open_project_title">
-                <p-dropdown [options]="projects"  [(ngModel)]="requerimiento.project"  optionLabel="name"
-                    [showClear]="true" placeholder="Seleccione un proyecto...">
-                </p-dropdown>
-            </td>
-            <td style="text-align: center;" *ngIf="requerimiento.open_project_title">{{requerimiento.open_project_title}}</td>-->
-            <td>
+            <td style="text-align: center;">{{requerimiento.open_project_assignee}}</td>            
+            <td *ngIf="!requerimiento.open_project_id">
                 <button pButton pRipple type="button" icon="pi pi-send"  class="p-button-rounded p-button-success" pTooltip="Enviar a Open Project"
                     (click)="sendOpenProject(requerimiento)" [disabled]="requerimiento.open_project_id">
                 </button>                
-            </td>            
+            </td>
+            <td style="text-align: center;" *ngIf="requerimiento.open_project_id">
+                <div *ngIf="requerimiento.open_project_priority" [class]="'starburst priority-' + requerimiento.open_project_priority.toLowerCase()">
+                    <span [class]="'starburst priority-' + requerimiento.open_project_priority.toLowerCase()">
+                        <span [class]="'starburst priority-' + requerimiento.open_project_priority.toLowerCase()">
+                            <span [class]="'starburst priority-' + requerimiento.open_project_priority.toLowerCase()">
+                            {{requerimiento.open_project_priority.charAt(0)}}
+                            </span>
+                        </span>
+                    </span>
+                </div>
+            </td>                      
         </tr>
     </ng-template>
     <ng-template pTemplate="paginatorleft">

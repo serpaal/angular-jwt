@@ -2,14 +2,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { OpenProjectService } from '../services/open-project.service';
 import { OpenProject } from './open-project';
-import { Project } from './project';
 import { Incidentes } from '../incidentes/incidentes';
 import { Requerimientos } from '../requerimientos/requerimientos';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'modal-open-project',
   templateUrl: './open-project.component.html',
-  styleUrls: ['./open-project.component.css']
+  styleUrls: ['./open-project.component.css'],
+  providers: [MessageService]
 })
 export class OpenProjectComponent implements OnInit {
   @Input() display:boolean; 
@@ -20,15 +21,20 @@ export class OpenProjectComponent implements OnInit {
 
   projects:any[] = []; 
   phases:any = [];
+  memberships: any = [];
   priorities: any = [];
   users: any = [];
 
   selectedProject:any; 
   selectedPhase:any; 
+  selectedMembership: any;
   selectedPriority: any;
   selectedUser: any;
 
-  constructor(private openProjectService: OpenProjectService) { }
+  constructor(
+    private openProjectService: OpenProjectService, 
+    private messageService: MessageService
+  ) { }
 
   ngOnInit(): void {
      this.getProjects();
@@ -45,7 +51,8 @@ export class OpenProjectComponent implements OnInit {
 
   workpackageSelected(){
     if(this.selectedProject){
-      this.getPhases(this.selectedProject.id.toString())
+      this.getPhases(this.selectedProject.id.toString());
+      this.getMemberships(this.selectedProject.id.toString());
     }   
   }
 
@@ -53,6 +60,13 @@ export class OpenProjectComponent implements OnInit {
     this.openProjectService.getPhases(work_packages_id)
     .then(data => {
       this.phases = data;
+    });
+  }  
+
+  getMemberships(work_packages_id:string): void {
+    this.openProjectService.getMemberships(work_packages_id)
+    .then(data => {
+      this.memberships = data;
     });
   }  
 
@@ -64,13 +78,14 @@ export class OpenProjectComponent implements OnInit {
   } 
 
   getUsers(): void {
-    this.openProjectService.getusers()
+    this.openProjectService.getUsers()
     .then(data => {
       this.users = data;
     });
   }
   
   sendOpenProject() {
+    let _this = this;
     let payload = {
       subject: this.esRequerimiento ? this.requerimiento.nro_req : this.incidente.nro_inc,
       description: {
@@ -108,8 +123,8 @@ export class OpenProjectComponent implements OnInit {
               href: null
           },
           assignee: {
-              href: this.selectedUser ? this.selectedUser._links.self.href : null,
-              title: this.selectedUser ? this.selectedUser._links.self.title : null
+              href: this.selectedMembership ? this.selectedMembership._links.principal.href : null,
+              title: this.selectedMembership ? this.selectedMembership._links.principal.title : null
           },
           version: {
               href: null
@@ -154,6 +169,9 @@ export class OpenProjectComponent implements OnInit {
         //this.requerimientosService.updateRequerimiento(record.id, record).subscribe(res => {
         ///  this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
        // });  
+    }, function(e){
+      console.log(e);
+      _this.messageService.add({severity: 'error', summary: 'Crear User Story', detail: e.error.message});
     });
   } 
   showModal(){

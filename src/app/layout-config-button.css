@@ -1,0 +1,54 @@
+.layout-config {
+    position: fixed;
+    top: 64px;
+    padding: 0;
+    right: 0;
+    display: block;
+    width: 21em;
+    z-index: 998;
+    height: calc(100% - 50px);
+    transform: translate3d(21em, 0px, 0px);
+    transition: transform 0.3s;
+    backface-visibility: hidden;
+    box-shadow: 0 2px 10px 0 rgb(0 0 0 / 24%);
+    color: #212121;
+    background-color: #ffffff;
+}
+
+.layout-config .layout-config-button {
+    display: block;
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    background-color: #7B95A3;
+    text-align: center;
+    color: var(--primary-color-text);
+    top: 270px;
+    left: -51px;
+    z-index: -1;
+    overflow: hidden;
+    cursor: pointer;
+    outline: 0 none;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    box-shadow: 0 5px 5px -3px rgb(0 0 0 / 20%), 0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
+}
+
+.layout-config .layout-config-button {
+    right: -42px;
+}
+
+.layout-config a {  
+    font-weight: 600;
+}
+
+.layout-config  .layout-config-button i {
+    font-size: 16px;
+    line-height: inherit;
+    cursor: pointer;
+    transform: rotate(1turn);
+    transition: transform 1s;
+}

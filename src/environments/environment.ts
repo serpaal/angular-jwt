@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiKey: "9efc25bc5b43f6c17579c5e4615124886c18cbf2ff18bb5dc409e163a3984986",
+  apiKey: "acc4668611bb31fca99b340a7b05ec676eec845bb3444948f4b02889540572e2",
   hostAuth: "http://159.203.189.218:9001",
   hostToolsOpenProject: "http://localhost:9001/api/v1",
   hostMesaAyuda: "http://localhost:5002/api",
@@ -20,7 +20,10 @@ export const environment = {
     setIncidentes: "/incidentes/set_incidentes_json",
     updateIncidentes: "/incidentes/update_incidentes_json",
     projects: '/projects',
-    workPackages: '/work_packages' 
+    workPackages: '/work_packages',
+    priorities: '/priorities',
+    users: '/users',
+    memberships: '/memberships' 
   }
 };
 

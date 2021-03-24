@@ -1,0 +1,45 @@
+.starburst.priority-low {
+    background: #C5F6FA;
+    color: #1A67A3;
+}
+
+.starburst.priority-normal {
+    background: #74C0FC;
+    color: #1A67A3;
+}
+
+.starburst.priority-high {
+    background: #F59F00;
+    color: #1A67A3;
+}
+
+.starburst.priority-immediate {
+    background: #CC5DE8;
+    color: #c8e6c9;
+}
+
+.starburst {
+	display:block;
+	width:2em;
+	height:2em;
+    -webkit-transform:rotate(-67.5deg);
+	-moz-transform:rotate(-67.5deg);
+	rotation:-67.5deg;
+	position:relative;
+	top:0em;
+	left:0em;
+	text-align:center;
+	text-decoration:none;
+	color:#000;
+	font-weight:bold;
+	font-family:Arial, sans-serif;
+}
+.starburst span {
+	display:block;
+	width:2em;
+	height:2em;
+    -webkit-transform:rotate(22.5deg);
+	-moz-transform:rotate(22.5deg);
+	rotation:22.5deg;
+}
+

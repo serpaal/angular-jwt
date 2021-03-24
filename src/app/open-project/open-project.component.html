@@ -1,9 +1,10 @@
+<p-toast position="top-right"></p-toast>
 <p-dialog header="Open Project" [(visible)]="display" [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
     [draggable]="false" [resizable]="false" (onHide) = "closeModal()" (onShow) = showModal()>
     <p></p>
     <div class="p-fluid">
         <div class="p-field">
-            <label for="workpackage">Proyecto</label>
+            <label for="workpackage" class="required">Proyecto</label>
             <p-dropdown id="workpackage" [options]="projects"  [(ngModel)]="selectedProject" (onChange)="workpackageSelected()"  optionLabel="name"
                 [showClear]="true" placeholder="Seleccione un proyecto...">
             </p-dropdown> 
@@ -16,7 +17,7 @@
         </div>
         <div class="p-field">
             <label for="asignado">Asginado</label>
-            <p-dropdown id="asignado" [options]="users"  [(ngModel)]="selectedUser"  optionLabel="name"
+            <p-dropdown id="asignado" [options]="memberships"  [(ngModel)]="selectedMembership"  optionLabel="_links.self.title" [disabled]="!selectedProject"
                 [showClear]="true" placeholder="Seleccionar...">
             </p-dropdown>
         </div>

@@ -41,7 +41,7 @@ export class OpenProjectService {
 
    getPriorities(){
        
-    const url = environment.hostOpenProject.concat('/priorities');   
+    const url = environment.hostOpenProject.concat(environment.endpoints["priorities"]);   
       
     const auth = window.btoa('apikey' + ':' + environment.apiKey); 
     const headers = { 'Authorization': `Basic ${auth}` };    
@@ -52,9 +52,9 @@ export class OpenProjectService {
      .then(data => { return data; });
    }
    
-   getusers(){
+   getUsers(){
        
-    const url = environment.hostOpenProject.concat('/users');   
+    const url = environment.hostOpenProject.concat(environment.endpoints["users"]);   
       
     const auth = window.btoa('apikey' + ':' + environment.apiKey); 
     const headers = { 'Authorization': `Basic ${auth}` };    
@@ -66,8 +66,7 @@ export class OpenProjectService {
    }
    
 
-   setWorkPackage(payload: any){
-   
+   setWorkPackage(payload: any){   
 
     const url = environment.hostOpenProject.concat(environment.endpoints["workPackages"]);
 
@@ -85,13 +84,28 @@ export class OpenProjectService {
       const url = environment.hostOpenProject.concat(environment.endpoints["workPackages"], '/', id.toString());
 
       const auth = window.btoa('apikey' + ':' + environment.apiKey); 
-      const headers = { 'Authorization': `Basic ${auth}` };
+      const headers = new HttpHeaders();
+      headers.set('Authorization', `Basic ${auth}`);
+      headers.set("Access-Control-Allow-Origin", "*");
       
       return this.http.get<any>(`${url}`, { headers })
         .toPromise()
         .then(response => { 
           return response; 
       });
+   }
+
+   getMemberships(id:string){
+      const filter = `?filters=[{"project":{"operator":"=","values":[${id}]}}]&pageSize=1000`;    
+      const url = environment.hostOpenProject.concat(environment.endpoints["memberships"], filter); 
+      
+      const auth = window.btoa('apikey' + ':' + environment.apiKey); 
+      const headers = { 'Authorization': `Basic ${auth}` };    
+      
+      return this.http.get<any>(`${url}`, { headers })
+       .toPromise()
+       .then(res =>res._embedded.elements)
+       .then(data => { return data; });
    }
    
 }

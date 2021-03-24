@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
-import { formatDate } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Requerimientos } from './requerimientos';
 import { RequerimientosService } from '../services/requerimientos.service';
