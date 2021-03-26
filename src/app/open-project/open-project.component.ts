@@ -141,6 +141,7 @@ export class OpenProjectComponent implements OnInit {
     .then(data => {
       if(this.esRequerimiento){
         this.requerimiento.open_project_id = data.id.toString();
+        this.requerimiento.open_project_identifier = data._embedded.project.identifier;
         this.requerimiento.open_project_title = data._links.project.title;
         this.requerimiento.open_project_status = data._links.status.title; 
         this.requerimiento.open_project_percentage_done = data.percentageDone;

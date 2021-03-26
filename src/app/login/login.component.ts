@@ -28,16 +28,24 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     this.authService.login(this.form).subscribe(
-      data => {       
-        this.jwtStorage.saveToken(data.token);
-        this.jwtStorage.saveUser(data.user);
+      data => { 
+        if(!data.success){
+          this.errorMessage = data.msg;
+          return this.isLoginFailed = true;
+        }      
+
+        this.jwtStorage.saveToken(data.data.token);
+        this.jwtStorage.saveUser(data.data.usuario);
+        //this.jwtStorage.saveToken(data.token);
+        //this.jwtStorage.saveUser(data.user);
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.router.navigate(['/']);
       },
       err => {       
-        this.errorMessage = err.error.message;
+        this.errorMessage = err.msg;
+        //this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       }
     );

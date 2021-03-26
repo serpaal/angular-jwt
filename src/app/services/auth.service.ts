@@ -22,7 +22,8 @@ export class AuthService {
   login(credentials): Observable<any> {
     return this.http.post(AUTH_API, {
       username: credentials.username,
-      password: credentials.password
+      password: credentials.password,
+      codigoApp: 'SGO-WEB'
     }, httpOptions);
   }  
 }

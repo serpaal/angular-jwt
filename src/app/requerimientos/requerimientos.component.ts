@@ -6,6 +6,7 @@ import { Requerimientos } from './requerimientos';
 import { RequerimientosService } from '../services/requerimientos.service';
 import { OpenProjectService } from '../services/open-project.service';
 import { Project } from '../open-project/project';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-requerimientos',
@@ -106,6 +107,13 @@ export class RequerimientosComponent implements OnInit {
     });
   } 
   
+  goOpenProject(requerimiento: Requerimientos){
+    let serverOpenProject = environment.serverOpenProject;
+    let work_packages_id = requerimiento.open_project_id;
+    let identifier = requerimiento.open_project_identifier;
+    window.open(`${serverOpenProject}/projects/${identifier}/work_packages/${work_packages_id}`, "_blank");
+  }
+
   ngOnDestroy(): void {
   }
 }

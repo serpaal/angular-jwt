@@ -21,8 +21,10 @@ export class MainPanelComponent implements OnInit {
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
-      this.roles = user.roles;
-      this.username = user.firstname.concat(' ', user.lastname);
+      //this.roles = user.roles;
+      //this.username = user.firstname.concat(' ', user.lastname);
+      this.roles = [];
+      this.username = user.nombre;
       this.items = [
             { label: 'Requerimientos', icon: 'pi pi-cog', routerLink: ['/main/requerimientos']},
             { label: 'Incidentes', icon: 'pi pi-exclamation-triangle', routerLink: ['/main/incidentes']}

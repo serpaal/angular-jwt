@@ -5,6 +5,7 @@ export const environment = {
   hostToolsOpenProject: "http://localhost:9001/api/v1",
   hostMesaAyuda: "http://localhost:5002/api",
   hostOpenProject: "http://127.0.0.1:8080/api/v3",
+  serverOpenProject:  "http://127.0.0.1:8080",
   endpoints: {
     login: "/auth/login",
     requerimientosMesaAyuda: "/requeriminf",

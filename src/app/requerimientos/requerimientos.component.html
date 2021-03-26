@@ -55,7 +55,7 @@
             <td>{{requerimiento.descrip_req}}</td>
             <td>{{requerimiento.justific }}</td>
             <td style="text-align: center;">{{requerimiento.estado}}</td>
-            <td style="text-align: center;">{{requerimiento.open_project_id}}</td>
+            <td style="text-align: center;"><a href="javascript:void(0)" (click)="goOpenProject(requerimiento)">{{requerimiento.open_project_id}}</a></td>
             <td style="text-align: center;"><span *ngIf="requerimiento.open_project_status" [class]="'requerimiento-badge status-' + requerimiento.open_project_status.toLowerCase()">{{requerimiento.open_project_status}}</span></td>
             <td>
                 <p-progressBar [value]="requerimiento.open_project_percentage_done" [showValue]="false" [style]="{'height': '6px'}"></p-progressBar>
