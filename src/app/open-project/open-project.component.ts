@@ -149,6 +149,7 @@ export class OpenProjectComponent implements OnInit {
         this.requerimiento.open_project_priority = data._links.priority.title;
       } else {
         this.incidente.open_project_id = data.id.toString();
+        this.incidente.open_project_identifier = data._embedded.project.identifier;
         this.incidente.open_project_title = data._links.project.title;
         this.incidente.open_project_status = data._links.status.title; 
         this.incidente.open_project_percentage_done = data.percentageDone;
