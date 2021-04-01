@@ -6,6 +6,7 @@ import { Project } from '../open-project/project';
 import { IncidentesService } from '../services/incidentes.service';
 import { Incidentes } from './incidentes';
 import { OpenProjectService } from '../services/open-project.service';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -106,6 +107,13 @@ export class IncidentesComponent implements OnInit, OnDestroy {
     this.incidentesService.updateIncidente(ev.incidente.id, ev.incidente).subscribe(res => {
       this.messageService.add({severity: 'success', summary: 'Crear User Story', detail: 'Registro exitoso'});
     });  
+  }
+
+  goOpenProject(incidente: Incidentes){
+    let serverOpenProject = environment.serverOpenProject;
+    let work_packages_id = incidente.open_project_id;
+    let identifier = incidente.open_project_identifier;
+    window.open(`${serverOpenProject}/projects/${identifier}/work_packages/${work_packages_id}`, "_blank");
   }
 
   ngOnDestroy(): void {

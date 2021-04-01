@@ -178,6 +178,7 @@ export class OpenProjectComponent implements OnInit {
   showModal(){
     this.selectedProject = null;
     this.selectedPhase = null;
+    this.selectedMembership = null;
     this.selectedUser = null;
     this.selectedPriority = null;    
   }

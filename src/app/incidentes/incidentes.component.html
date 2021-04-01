@@ -54,7 +54,7 @@
             <td style="text-align: center;">{{incidente.fecha_sol | date: 'dd/MM/yyyy'}}</td>
             <td>{{incidente.descrip}}</td>
             <td style="text-align: center;">{{incidente.estado}}</td>
-            <td style="text-align: center;">{{incidente.open_project_id}}</td>
+            <td style="text-align: center;"><a href="javascript:void(0)" (click)="goOpenProject(incidente)">{{incidente.open_project_id}}</a></td>
             <td style="text-align: center;"><span *ngIf="incidente.open_project_status" [class]="'incidente-badge status-' + incidente.open_project_status.toLowerCase()">{{incidente.open_project_status}}</span></td>
             <td>
                 <p-progressBar [value]="incidente.open_project_percentage_done" [showValue]="false" [style]="{'height': '6px'}"></p-progressBar>
